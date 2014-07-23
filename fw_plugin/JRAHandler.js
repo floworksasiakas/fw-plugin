@@ -70,9 +70,7 @@ JRAHandler.prototype.ajaxPost = function(callback, content){
         url: this.rootPostsUrl,
         data: JSON.stringify(content),
     }).done(function(data, text) {
-        alert(text);
     	callback();
-        
     }).error(function(jqxhr, type, text){
         if (text == "Forbidden"){
             alert("You don't have the rights to do that :(");
