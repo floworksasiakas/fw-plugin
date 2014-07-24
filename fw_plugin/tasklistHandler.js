@@ -14,12 +14,50 @@ function loadTaskList() {
     fadeInResultText();
     var handler = new JRAHandler();
     handler.readAllPosts(function handleResponse(data){
+
         tasksFetched = true;
         var json = JSON.parse(data);
-        transformToTable(json);
+        traversePostIDs(json);
+
+        //transformToTable(json);
         $('#taskListReloadButton').prop("disabled", false)
                                   .css("background-color", "green");
     });
+}
+
+function traversePostIDs(json){
+    var postIDs = [];
+    var postContents = [];
+
+    for(var i = 0; i < json.length; i++){
+        postIDs[i] = json[i]['ID'];
+        postContents[i] = json[i]['content'];
+    }
+
+    readMetaDatas(postIDs, postContents);
+}
+
+function readMetaDatas(postIDs, postContents){
+
+    var handler = new JRAHandler();
+
+    for(var i = 0; i < postIDs.length; i++){
+
+        handler.readMeta(function handleResponse(response, index){
+            var responseJSON = JSON.parse(JSON.stringify(response));
+            
+            if (responseJSON[0]['value'] == "task"){
+                addToTaskList(postContents[index], responseJSON[1]['value']);
+            } else if (responseJSON[1]['value'] == "task"){
+                addToTaskList(postContents[index], responseJSON[0]['value']);
+            }
+        }, "wp-json/posts/" + postIDs[i] + "/meta"
+         , i);
+    }
+}
+
+function addToTaskList(task, taskStatus){
+    alert("Task: " + task + "\n Task status: " + taskStatus);
 }
 
 var tasksFetched = false;
