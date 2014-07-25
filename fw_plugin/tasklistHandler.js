@@ -12,6 +12,7 @@ function loadTaskList() {
     tasksFetched = false;
     $('#tableWrapper').html('Fetching tasks...');
     fadeInResultText();
+    
     var handler = new JRAHandler();
     handler.readAllPosts(function handleResponse(data){
 
@@ -19,7 +20,6 @@ function loadTaskList() {
         var json = JSON.parse(data);
         traversePostIDs(json);
 
-        //transformToTable(json);
         $('#taskListReloadButton').prop("disabled", false)
                                   .css("background-color", "green");
     });
@@ -40,24 +40,54 @@ function traversePostIDs(json){
 function readMetaDatas(postIDs, postContents){
 
     var handler = new JRAHandler();
-
+    createTasklistTable();
+    
     for(var i = 0; i < postIDs.length; i++){
 
         handler.readMeta(function handleResponse(response, index){
             var responseJSON = JSON.parse(JSON.stringify(response));
             
             if (responseJSON[0]['value'] == "task"){
-                addToTaskList(postContents[index], responseJSON[1]['value']);
+                addToTaskList(postContents[index], responseJSON[1]['value'], responseJSON[2]['value']);
             } else if (responseJSON[1]['value'] == "task"){
-                addToTaskList(postContents[index], responseJSON[0]['value']);
+                addToTaskList(postContents[index], responseJSON[0]['value'], responseJSON[2]['value']);
             }
+
         }, "wp-json/posts/" + postIDs[i] + "/meta"
          , i);
     }
 }
 
-function addToTaskList(task, taskStatus){
-    alert("Task: " + task + "\n Task status: " + taskStatus);
+function createTasklistTable(){
+    $('#tableWrapper').html("<table id='taskTable'></table>");
+    $('#taskTable').append("<th>Task</th>"
+                         + "<th>Person</th>"
+                         + "<th>Waiting</th>"
+                         + "<th>In Progress</th>"
+                         + "<th>Completed</th>");
+}
+
+function addToTaskList(task, taskStatus, person){
+    
+    if(taskStatus == 1){
+        $('#taskTable').append('<tr><td>' + task + '</td>'
+                                 + '<td>' + person + '</td>'
+                                 + '<td class="secondCol">X</td>' 
+                                 + '<td class="thirdCol"></td>'
+                                 + '<td class="fourthCol"></td></tr>');
+    } else if (taskStatus == 2){
+        $('#taskTable').append('<tr><td>' + task + '</td>'
+                                 + '<td>' + person + '</td>'
+                                 + '<td class="secondCol"></td>' 
+                                 + '<td class="thirdCol">X</td>'
+                                 + '<td class="fourthCol"></td></tr>');
+    } else if (taskStatus == 3){
+        $('#taskTable').append('<tr><td>' + task + '</td>'
+                                 + '<td>' + person + '</td>'
+                                 + '<td class="secondCol"></td>' 
+                                 + '<td class="thirdCol"></td>'
+                                 + '<td class="fourthCol">X</td></tr>');
+    }
 }
 
 var tasksFetched = false;
@@ -79,40 +109,3 @@ function fadeOutResultText(){
             fadeInResultText();
     });
 }
-
-function transformToTable(json) {
-    var elem = document.getElementById("tableWrapper");
-    var resultTable = "<table>";
-    
-    for (var i = -1; i < json.length; i++){
-        if (i == -1){
-            resultTable += "<th>Task</th>"
-                         + "<th>Person</th>"
-                         + "<th>Waiting</th>"
-                         + "<th>In Progress</th>"
-                         + "<th>Completed</th>";
-        } else {
-            if (endsWith(json[i]['title'], "task")){
-                var quoteRegEx = "&#8217;";
-                var data = json[i]['title'].split(quoteRegEx);
-                var person = data[0];
-
-                resultTable    += "<tr>"
-                               +  "<td>" + json[i]['content'] + "</td>"
-                               +  "<td>" + person + "</td>"
-                               +  "<td class='secondCol'>X</td>"
-                               +  "<td class='thirdCol'></td>"
-                               +  "<td class='fourthCol'></td>"
-                               +  "</tr>";
-            }
-        }
-    }
-    resultTable += "</table>";
-    elem.innerHTML = resultTable;
-}
-
-function endsWith(str, suffix) {
-    return str.indexOf(suffix, str.length - suffix.length) !== -1;
-}
-
-//loadTaskList();
