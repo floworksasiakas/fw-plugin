@@ -30,11 +30,27 @@ JRAHandler.prototype.readAllPosts = function(callback){
  */
 JRAHandler.prototype.createTask = function(callback, person, task) {
 	var title = person + "'s task";
+
+    var taskStatus = {
+        "key" : "taskStatus",
+        "value" : 1
+    }
+
+    var postType = {
+        "key" : "postType",
+        "value" : "task"
+    }
+
+    var postMetaData = [
+        taskStatus,
+        postType
+    ]
             
     post = {
         "title" : title,
     	"content_raw" : task,
-    	"status" : "publish"
+    	"status" : "publish",
+        "post_meta" : postMetaData
     }
 
     this.ajaxPost(callback, post);
@@ -77,3 +93,14 @@ JRAHandler.prototype.ajaxPost = function(callback, content){
         }
     });
 };
+
+JRAHandler.prototype.readMeta = function(callback, metaUrl, index){
+    //alert("Meta URL: " + metaUrl);
+    $.ajax({
+        type: "GET",
+        url: metaUrl
+    }).done(function(response){
+        //alert("Response: " + response);
+        callback(response, index);
+    });
+}
