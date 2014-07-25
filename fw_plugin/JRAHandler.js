@@ -41,9 +41,15 @@ JRAHandler.prototype.createTask = function(callback, person, task) {
         "value" : "task"
     }
 
+    var taskPerson = {
+        "key" : "taskPerson",
+        "value" : person
+    }
+
     var postMetaData = [
         taskStatus,
-        postType
+        postType,
+        taskPerson
     ]
             
     post = {
@@ -85,6 +91,7 @@ JRAHandler.prototype.ajaxPost = function(callback, content){
         type: "POST",
         url: this.rootPostsUrl,
         data: JSON.stringify(content),
+        cache: false
     }).done(function(data, text) {
     	callback();
     }).error(function(jqxhr, type, text){
@@ -94,13 +101,20 @@ JRAHandler.prototype.ajaxPost = function(callback, content){
     });
 };
 
+/**
+ * Reads the post's metadata from the given url.
+ * @param {Function} the callback function for result handling.
+ * @param {String} the url where the post's metadata will be read.
+ * @param {Integer} the index of the post, used inside loops to remember
+ * the index of the post, so it can be used later when callback gets called.
+ */
 JRAHandler.prototype.readMeta = function(callback, metaUrl, index){
-    //alert("Meta URL: " + metaUrl);
+    
     $.ajax({
         type: "GET",
-        url: metaUrl
+        url: metaUrl,
+        cache: false
     }).done(function(response){
-        //alert("Response: " + response);
         callback(response, index);
     });
 }
