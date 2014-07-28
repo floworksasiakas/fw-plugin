@@ -8,8 +8,11 @@ $('document').ready(function(){
 
 
 function loadPosts() {
-    httpGet("?json_route=/posts");
+	httpGet("?json_route=/posts/0/comments")
+	httpGet("?json_route=/posts");
 }
+
+
 
 function httpGet(theUrl) {
     postsFetched = false;
@@ -67,15 +70,11 @@ function transformToTable(json) {
                            +  "</dd>";
         }
     }
-    elem.innerHTML += "</ul>";
+    elem.innerHTML += "</dt>";
 }
 
 function endsWith(str, suffix) {
     return str.indexOf(suffix, str.length - suffix.length) !== -1;
-}
-
-function deleteTask(task) {
-    alert(task.previousElementSibling.innerHTML);
 }
 
 loadPosts();
