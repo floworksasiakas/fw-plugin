@@ -2,7 +2,7 @@
  * Default constructor
  */
 function JRAHandler(){
-    this.rootPostsUrl = "wp-json/posts";
+    this.rootPostsUrl = fwPluginUrl.siteurl + "/wp-json/posts";
 	this.allPostsUrl = this.rootPostsUrl + "?filter[posts_per_page]=-1";
 }
 
@@ -112,7 +112,7 @@ JRAHandler.prototype.readMeta = function(callback, metaUrl, index){
     
     $.ajax({
         type: "GET",
-        url: metaUrl,
+        url: this.rootPostsUrl + "/" + metaUrl,
         cache: false
     }).done(function(response){
         callback(response, index);
