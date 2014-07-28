@@ -55,8 +55,10 @@ function createSomething(){
 function fw_load_widget() {
     require_once('class-fwInputWidget.php');
     require_once('class-fwTasklistWidget.php');
+    require_once('class-fwAlClientWidget.php');
     register_widget( 'fw_InputWidget' );
     register_widget('fw_TasklistWidget');
+    register_widget('fw_AlClientWidget');
 }
     
 add_action( 'widgets_init', 'fw_load_widget' );
