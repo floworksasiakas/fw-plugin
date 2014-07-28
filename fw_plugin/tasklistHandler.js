@@ -38,24 +38,35 @@ function traversePostIDs(json){
 }
 
 function readMetaDatas(postIDs, postContents){
-
-    var handler = new JRAHandler();
     createTasklistTable();
-    
+    var handler = new JRAHandler();
+
     for(var i = 0; i < postIDs.length; i++){
 
         handler.readMeta(function handleResponse(response, index){
             var responseJSON = JSON.parse(JSON.stringify(response));
             
-            if (responseJSON[0]['value'] == "task"){
-                addToTaskList(postContents[index], responseJSON[1]['value'], responseJSON[2]['value']);
-            } else if (responseJSON[1]['value'] == "task"){
-                addToTaskList(postContents[index], responseJSON[0]['value'], responseJSON[2]['value']);
+            var taskStatus;
+            var taskPerson;
+            if (getValue(responseJSON, "postType") == "task"){
+                taskStatus = getValue(responseJSON, "taskStatus");
+                taskPerson = getValue(responseJSON, "taskPerson");
             }
 
-        }, "wp-json/posts/" + postIDs[i] + "/meta"
+            addToTaskList(postContents[index], taskStatus, taskPerson);
+
+        }, postIDs[i] + "/meta"
          , i);
     }
+}
+
+function getValue(json, key){
+    for(var i = 0; i < json.length; i++){
+        if (json[i]['key'] == key){
+            return json[i]['value'];
+        }
+    }
+    return null;
 }
 
 function createTasklistTable(){
