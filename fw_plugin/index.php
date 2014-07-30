@@ -55,10 +55,35 @@ function createSomething(){
 function fw_load_widget() {
     require_once('class-fwInputWidget.php');
     require_once('class-fwTasklistWidget.php');
-    register_widget( 'fw_InputWidget' );
+    require_once('class-fwAlClientWidget.php');
+    register_widget('fw_InputWidget');
     register_widget('fw_TasklistWidget');
+    register_widget('fw_AlClientWidget');
+}
+
+function customPostInit(){
+    $args = array(
+        'label' => 'Create Custom Post',
+        'public' => true,
+        'show_ui' => true,
+        'capability_type' => 'post',
+        'hierarchical' => false,
+        'rewrite' => array('slug' => 'custom-posts'),
+        'query_var' => true,
+        'menu_icon' => 'dashicons-welcome-write-blog',
+        'supports' => array(
+            'type',
+            'author',
+            'editor',
+            'custom-fields',
+            'comments',
+            'revisions',
+            'thumbnail')
+        );
+    register_post_type('custom-posts', $args);
 }
     
 add_action( 'widgets_init', 'fw_load_widget' );
 add_action('admin_menu','createSomething');
+add_action('init', 'customPostInit');
 ?>
