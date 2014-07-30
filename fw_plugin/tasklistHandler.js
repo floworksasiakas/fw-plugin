@@ -47,19 +47,20 @@ function readMetaDatas(postIDs, postContents){
             var responseJSON = JSON.parse(JSON.stringify(response));
             
             var taskStatus;
-            var taskPerson;
+            var personID;
             if (getValue(responseJSON, "postType") == "task"){
                 taskStatus = getValue(responseJSON, "taskStatus");
-                taskPerson = getValue(responseJSON, "taskPerson");
+                personID = getValue(responseJSON, "taskPerson");
             }
 
-            addToTaskList(postContents[index], taskStatus, taskPerson);
+            addToTaskList(postContents[index], taskStatus, personID);
 
         }, postIDs[i] + "/meta"
          , i);
     }
 }
 
+// Function works only for JSON REST API provided metadata.
 function getValue(json, key){
     for(var i = 0; i < json.length; i++){
         if (json[i]['key'] == key){
@@ -78,27 +79,34 @@ function createTasklistTable(){
                          + "<th>Completed</th>");
 }
 
-function addToTaskList(task, taskStatus, person){
+function addToTaskList(task, taskStatus, personID){
     
-    if(taskStatus == 1){
-        $('#taskTable').append('<tr><td>' + task + '</td>'
-                                 + '<td>' + person + '</td>'
-                                 + '<td class="secondCol">X</td>' 
-                                 + '<td class="thirdCol"></td>'
-                                 + '<td class="fourthCol"></td></tr>');
-    } else if (taskStatus == 2){
-        $('#taskTable').append('<tr><td>' + task + '</td>'
-                                 + '<td>' + person + '</td>'
-                                 + '<td class="secondCol"></td>' 
-                                 + '<td class="thirdCol">X</td>'
-                                 + '<td class="fourthCol"></td></tr>');
-    } else if (taskStatus == 3){
-        $('#taskTable').append('<tr><td>' + task + '</td>'
-                                 + '<td>' + person + '</td>'
-                                 + '<td class="secondCol"></td>' 
-                                 + '<td class="thirdCol"></td>'
-                                 + '<td class="fourthCol">X</td></tr>');
-    }
+    var handler = new JRAHandler();
+    handler.readUsersUrl(function handleResponse(response){
+        var responseJSON = JSON.parse(JSON.stringify(response));
+        var person = responseJSON["username"];
+
+        if(taskStatus == 1){
+            $('#taskTable').append('<tr><td>' + task + '</td>'
+                                     + '<td>' + person + '</td>'
+                                     + '<td class="secondCol">X</td>' 
+                                     + '<td class="thirdCol"></td>'
+                                     + '<td class="fourthCol"></td></tr>');
+        } else if (taskStatus == 2){
+            $('#taskTable').append('<tr><td>' + task + '</td>'
+                                     + '<td>' + person + '</td>'
+                                     + '<td class="secondCol"></td>' 
+                                     + '<td class="thirdCol">X</td>'
+                                     + '<td class="fourthCol"></td></tr>');
+        } else if (taskStatus == 3){
+            $('#taskTable').append('<tr><td>' + task + '</td>'
+                                     + '<td>' + person + '</td>'
+                                     + '<td class="secondCol"></td>' 
+                                     + '<td class="thirdCol"></td>'
+                                     + '<td class="fourthCol">X</td></tr>');
+        }    
+    }, personID);
+    
 }
 
 var tasksFetched = false;

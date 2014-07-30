@@ -2,6 +2,7 @@
  * Default constructor
  */
 function JRAHandler(){
+    this.rootUsersUrl = fwPluginUrl.siteurl + "/wp-json/users"
     this.rootPostsUrl = fwPluginUrl.siteurl + "/wp-json/posts";
 	this.allPostsUrl = this.rootPostsUrl + "?filter[posts_per_page]=-1";
 }
@@ -28,7 +29,7 @@ JRAHandler.prototype.readAllPosts = function(callback){
  * @param {String} the person assigned for the task.
  * @param {String} the task.
  */
-JRAHandler.prototype.createTask = function(callback, person, task) {
+JRAHandler.prototype.createTask = function(callback, person, personID, task) {
 	var title = person + "'s task";
 
     var taskStatus = {
@@ -43,7 +44,7 @@ JRAHandler.prototype.createTask = function(callback, person, task) {
 
     var taskPerson = {
         "key" : "taskPerson",
-        "value" : person
+        "value" : personID
     }
 
     var postMetaData = [
@@ -116,5 +117,20 @@ JRAHandler.prototype.readMeta = function(callback, metaUrl, index){
         cache: false
     }).done(function(response){
         callback(response, index);
+    });
+}
+
+/**
+ * Reads the JSON REST API endpoint of the given user ID.
+ * @param {Function} the callback function for result handling.
+ * @param {Integer} the user ID.
+ */
+JRAHandler.prototype.readUsersUrl = function(callback, userID){
+    $.ajax({
+        type: "GET",
+        url: this.rootUsersUrl + "/" + userID,
+        cache: false
+    }).done(function(response){
+        callback(response);
     });
 }

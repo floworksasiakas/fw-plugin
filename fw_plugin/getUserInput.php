@@ -19,4 +19,6 @@ echo '<select id="textType" onchange="changeInputFields(this.value)">
       <section id="result">
       </section>
       ';
+
+      wp_localize_script('inputHandlerScript', 'fwPluginUsers', array( 'users' => get_users() ));
 ?>
