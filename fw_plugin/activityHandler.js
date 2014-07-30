@@ -8,11 +8,12 @@ $('document').ready(function(){
 
 
 function loadPosts() {
-	httpGet("?json_route=/posts/0/comments")
-	httpGet("?json_route=/posts");
+    httpGet("?json_route=/posts")
 }
 
-
+function loadComments() {
+    httpGet("?json_route=/posts/0/comments");
+}
 
 function httpGet(theUrl) {
     postsFetched = false;
@@ -67,14 +68,27 @@ function transformToTable(json) {
 						   +  "</dt>"
 						   +  "<dd>"
                            +  json[i]['content']
+                           +  json[i]['date']
                            +  "</dd>";
         }
     }
-    elem.innerHTML += "</dt>";
+    elem.innerHTML += "</dl>";
 }
-
-function endsWith(str, suffix) {
-    return str.indexOf(suffix, str.length - suffix.length) !== -1;
+/*
+function transformToTable(json) {
+    var elem = document.getElementById("tableWrapper");
+    elem.innerHTML = "<dl>";
+    
+    for (var i = 0; i < 5; i++){
+        if (json[i]['type'], "comment"){
+            elem.innerHTML += "<dt>"
+                           +  json[i]['content']
+						   +  "</dt>";
+        }
+    }
+    elem.innerHTML += "</dl>";
 }
+*/
 
 loadPosts();
+loadComments();
