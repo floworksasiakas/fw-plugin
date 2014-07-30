@@ -56,6 +56,7 @@ function fw_load_widget() {
     require_once('class-fwInputWidget.php');
     require_once('class-fwTasklistWidget.php');
     require_once('class-fwAlClientWidget.php');
+<<<<<<< HEAD
     register_widget('fw_InputWidget');
     register_widget('fw_TasklistWidget');
     register_widget('fw_AlClientWidget');
@@ -81,6 +82,11 @@ function customPostInit(){
             'thumbnail')
         );
     register_post_type('custom-posts', $args);
+=======
+    register_widget( 'fw_InputWidget' );
+    register_widget('fw_TasklistWidget');
+    register_widget('fw_AlClientWidget');
+>>>>>>> origin/master
 }
     
 add_action( 'widgets_init', 'fw_load_widget' );
