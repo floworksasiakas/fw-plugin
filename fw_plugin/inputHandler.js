@@ -16,9 +16,10 @@ function attachEnterListener(){
             handler.createStatusPost(postSuccessful
                                     , textContent);
         } else if (type == "Task"){
-
+            var person = $('#person').val();
             handler.createTask(postSuccessful
-                              , $('#person').val()
+                              , person
+                              , getUserId(person)
                               , textContent);
         
         } else if (type == "Blog"){
@@ -70,9 +71,33 @@ function changeInputFields(type){
     if (type == "Blog"){
         $('#wrap').html('<input id="input" type="text" placeholder="What\'s on your mind?"></input>');
     } else if (type == "Task"){
-        $('#wrap').html('<input id="person" type="text" placeholder="Person"></input><br /><input id="input" type="text" placeholder="Task name"></input>');
+        changeToTaskInput();
     } else if (type == "Status"){
         $('#wrap').html('<input id="input" type="text" placeholder="How are you feeling today?"></input>');
     }
     attachEnterListener();
+}
+
+function changeToTaskInput(){
+    var json = JSON.parse(JSON.stringify(fwPluginUsers.users));
+    var resultHTML = "Person <br /> <select id='person'>";
+    for (var i = 0; i < json.length; i++){
+        var user = json[i]['data']['user_nicename'];
+        resultHTML += "<option value='" + user + "'>" + user + "</option>";
+    }
+    resultHTML += "</select><br />";
+
+    resultHTML += "Task: <br /> <input id='input' type='text'></input>";
+
+    $('#wrap').html(resultHTML);
+}
+
+function getUserId(username){
+    var json = JSON.parse(JSON.stringify(fwPluginUsers.users));
+    for (var i = 0; i < json.length; i++){
+        if (json[i]['data']['user_nicename'] == username){
+            return json[i]['data']['ID'];
+        }
+    }
+    return null;
 }

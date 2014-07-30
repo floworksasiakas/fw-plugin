@@ -8,12 +8,20 @@ $('document').ready(function(){
 
 
 function loadPosts() {
+<<<<<<< HEAD
+	httpGet("?json_route=/posts/0/comments")
+	httpGet("?json_route=/posts");
+}
+
+
+=======
     httpGet("?json_route=/posts")
 }
 
 function loadComments() {
     httpGet("?json_route=/posts/0/comments");
 }
+>>>>>>> origin/master
 
 function httpGet(theUrl) {
     postsFetched = false;
@@ -68,6 +76,19 @@ function transformToTable(json) {
 						   +  "</dt>"
 						   +  "<dd>"
                            +  json[i]['content']
+<<<<<<< HEAD
+                           +  "</dd>";
+        }
+    }
+    elem.innerHTML += "</dt>";
+}
+
+function endsWith(str, suffix) {
+    return str.indexOf(suffix, str.length - suffix.length) !== -1;
+}
+
+loadPosts();
+=======
                            +  json[i]['date']
                            +  "</dd>";
         }
@@ -92,3 +113,4 @@ function transformToTable(json) {
 
 loadPosts();
 loadComments();
+>>>>>>> origin/master
