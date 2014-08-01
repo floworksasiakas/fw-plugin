@@ -1,9 +1,6 @@
 <?php
-    echo '<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-          <button id="taskListReloadButton">Reload</button>
+    echo '<button id="taskListReloadButton">Reload</button>
           <section id="tableWrapper"></section>';
-
-
 
     $tableStylePath = plugins_url( 'tableStyle.css', __FILE__ );
     $JRAHandlerPath = plugins_url( 'JRAHandler.js', __FILE__ );

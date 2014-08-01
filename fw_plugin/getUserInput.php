@@ -1,7 +1,4 @@
 <?php
-
-echo '<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>';
-
       $inputHandlerPath = plugins_url( 'inputHandler.js', __FILE__ );
       wp_enqueue_script('inputHandlerScript', $inputHandlerPath);
       

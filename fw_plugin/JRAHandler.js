@@ -27,6 +27,7 @@ JRAHandler.prototype.readAllPosts = function(callback){
  * @param {Function} a callback function for result handling,
  * called when the posting is done.
  * @param {String} the person assigned for the task.
+ * @param {Integer} the ID of the person.
  * @param {String} the task.
  */
 JRAHandler.prototype.createTask = function(callback, person, personID, task) {
