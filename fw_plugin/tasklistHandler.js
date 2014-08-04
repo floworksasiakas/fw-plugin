@@ -1,3 +1,4 @@
+var $ = jQuery;
 $('document').ready(function(){
     $('#taskListReloadButton').on('click', function() {
         loadTaskList();
