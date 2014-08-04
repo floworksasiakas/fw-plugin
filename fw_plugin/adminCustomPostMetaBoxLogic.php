@@ -1,11 +1,12 @@
 <?php
+
 /**
  * Adds a box to the main column on the Post screen.
  */
 function myplugin_add_meta_box() {
     add_meta_box('customPostMeta'
-        , __( 'Task Person', 'myplugin_textdomain' )
-        , 'myplugin_meta_box_callback'
+        , __( 'Metadata', 'myplugin_textdomain' )
+        , 'fwPluginMetaCallback'
         , 'post'
     );
 }
@@ -15,7 +16,7 @@ function myplugin_add_meta_box() {
  * 
  * @param WP_Post $post The object for the current post/page.
  */
-function myplugin_meta_box_callback( $post ) {
+function fwPluginMetaCallback($posts) {
 
     // Add an nonce field so we can check for it later.
     wp_nonce_field( 'myplugin_meta_box', 'myplugin_meta_box_nonce' );
@@ -24,19 +25,15 @@ function myplugin_meta_box_callback( $post ) {
      * Use get_post_meta() to retrieve an existing value
      * from the database and use the value for the form.
      */
-    $value = get_post_meta( $post->ID, 'taskPerson', true );
+    //$value = get_post_meta( $post->ID, 'taskPerson', true );
 
-    echo '<select id="postType" onchange="changeInputFields(this.value)">
+    echo '<select id="postType" name="postType" onchange="changeInputFields(this.value)">
             <option value="Status">Status</option>
             <option value="Task">Task</option>
             <option value="Blog">Blog</option>
           </select>';
-    echo '<section id="wrap"></section>';
 
-    echo '<label for="myplugin_new_field">';
-    _e( 'Add the person responsible for this task', 'myplugin_textdomain' );
-    echo '</label> ';
-    echo '<input type="text" id="myplugin_new_field" name="myplugin_new_field" value="' . esc_attr( $value ) . '" size="25" />';
+    echo '<div id="metaWrapper"></div>';
 }
 
 /**
@@ -80,17 +77,18 @@ function myplugin_save_meta_box_data( $post_id ) {
         }
     }
 
-    /* OK, it's safe for us to save the data now. */
-    
-    // Make sure that it is set.
-    if ( ! isset( $_POST['myplugin_new_field'] ) ) {
-        return;
+    if (isset($_POST['postType'])){
+        $type = $_POST['postType'];
+
+        if ($type == "Status"){
+            update_post_meta( $post_id, 'postType', "status" );
+        } else if ($type == "Task"){
+            update_post_meta( $post_id, 'taskPerson', $_POST['userID'] );
+            update_post_meta( $post_id, 'taskStatus', 1 );
+            update_post_meta( $post_id, 'postType', "task" );
+        } else if ($type == "Blog"){
+            update_post_meta( $post_id, 'postType', "blog" );
+        }
     }
-
-    // Sanitize user input.
-    $my_data = sanitize_text_field( $_POST['myplugin_new_field'] );
-
-    // Update the meta field in the database.
-    update_post_meta( $post_id, 'taskPerson', $my_data );
 }
 ?>

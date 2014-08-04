@@ -8,12 +8,10 @@ function attachEnterListener(){
     $('#input').bind("enterKey", function(e){
         var type = $('#textType').val();
         var textContent = $('#input').val();
-        
         var handler = new JRAHandler();
         postingStarted();
 
         if (type == "Status"){
-
             handler.createStatusPost(postSuccessful
                                     , textContent);
         } else if (type == "Task"){
@@ -22,7 +20,6 @@ function attachEnterListener(){
                               , person
                               , getUserId(person)
                               , textContent);
-        
         } else if (type == "Blog"){
             
         }

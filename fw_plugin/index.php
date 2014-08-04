@@ -27,7 +27,7 @@ function postPageEnqueue($hook) {
         return;
     
     wp_enqueue_script('adminCreatePostScript', plugin_dir_url( __FILE__ ) . 'adminCreatePostHandler.js');
-    wp_localize_script('adminCreatePostScript', 'fwPluginUsers', array( 'users' => get_users() ));
+    wp_localize_script('adminCreatePostScript', 'fwPluginUsers', array( 'users' => get_users(), 'plugin_url' => plugins_url() ));
 }
 require_once('adminCustomPostMetaBoxLogic.php');
 
