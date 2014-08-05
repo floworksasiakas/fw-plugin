@@ -35,4 +35,6 @@ add_action('admin_enqueue_scripts', 'postPageEnqueue');
 add_action('widgets_init', 'fw_load_widget');
 add_action('add_meta_boxes', 'myplugin_add_meta_box');
 add_action('save_post', 'myplugin_save_meta_box_data');
+
+require_once('fwCustomPostCommentParser.php');
 ?>
