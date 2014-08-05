@@ -29,12 +29,29 @@ function postPageEnqueue($hook) {
     wp_enqueue_script('adminCreatePostScript', plugin_dir_url( __FILE__ ) . 'adminCreatePostHandler.js');
     wp_localize_script('adminCreatePostScript', 'fwPluginUsers', array( 'users' => get_users(), 'plugin_url' => plugins_url() ));
 }
+
+function enqueueNonAdminScripts() {
+    if (!is_admin()) {
+        wp_enqueue_script(
+            'commentFieldHandler'
+            , plugin_dir_url( __FILE__ ) . 'commentHandler.js'
+            , array( 'jquery' )   
+        );
+
+        wp_localize_script('commentFieldHandler'
+                           , 'fwPlugin'
+                           , array( 'page' => basename(get_permalink())
+                                  , 'users' => get_users()));
+    }
+}
+
 require_once('adminCustomPostMetaBoxLogic.php');
+require_once('fwCustomPostCommentParser.php');
 
 add_action('admin_enqueue_scripts', 'postPageEnqueue');
 add_action('widgets_init', 'fw_load_widget');
 add_action('add_meta_boxes', 'myplugin_add_meta_box');
 add_action('save_post', 'myplugin_save_meta_box_data');
+add_action( 'wp_enqueue_scripts', 'enqueueNonAdminScripts' );
 
-require_once('fwCustomPostCommentParser.php');
 ?>
