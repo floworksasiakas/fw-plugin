@@ -30,8 +30,14 @@
 		} else if (startsWith($commentContent, $commandsArray['in_progress'])){
 			update_post_meta($postID, 'taskStatus', 2);
 		} else if (startsWith($commentContent, $commandsArray['assignment'])){
-			update_post_meta($postID, 'taskPerson', $commentContent);
+			$person = getPerson($commentContent, $commandsArray['assignment']);
+			update_post_meta($postID, 'taskPerson', $person);
 		}
+	}
+
+	function getPerson($commentContent, $prefix){
+		return trim(substr($commentContent
+					       , strrpos($commentContent, $prefix) + strlen($prefix)));
 	}
 
 	function startsWith($haystack, $needle) {
