@@ -52,9 +52,8 @@ function readMetaDatas(postIDs, postContents){
             if (getValue(responseJSON, "postType") == "task"){
                 taskStatus = getValue(responseJSON, "taskStatus");
                 personID = getValue(responseJSON, "taskPerson");
+                addToTaskList(postContents[index], taskStatus, personID);
             }
-
-            addToTaskList(postContents[index], taskStatus, personID);
 
         }, postIDs[i] + "/meta"
          , i);
