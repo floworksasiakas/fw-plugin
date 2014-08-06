@@ -8,12 +8,11 @@ $('document').ready(function(){
 
 
 function loadPosts() {
-	httpGet("?json_route=/posts/0/comments")
-	httpGet("?json_route=/posts");
+	httpGet("/wp-json/posts");
 }
 
 function loadComments() {
-    httpGet("?json_route=/posts/0/comments");
+    httpGet("/wp-json/posts/0/comments");
 }
 
 function httpGet(theUrl) {
@@ -73,10 +72,6 @@ function transformToTable(json) {
         }
     }
     elem.innerHTML += "</dt>";
-}
-
-function endsWith(str, suffix) {
-    return str.indexOf(suffix, str.length - suffix.length) !== -1;
 }
 /*
 function transformToTable(json) {
