@@ -38,10 +38,33 @@ function enqueueNonAdminScripts() {
             , array( 'jquery' )   
         );
 
-        wp_localize_script('commentFieldHandler'
-                           , 'fwPlugin'
-                           , array( 'page' => basename(get_permalink())
-                                  , 'users' => get_users()));
+        wp_enqueue_style(
+            'jQueryUIStyle'
+            , plugin_dir_url( __FILE__ ) . 'jquery-ui-1.11.0.custom/jquery-ui.min.css'
+        );
+
+        wp_enqueue_script(
+            'jQuery'
+            , plugin_dir_url( __FILE__ ) . 'jquery-ui-1.11.0.custom/external/jquery/jquery.js'
+        );
+
+        wp_enqueue_script(
+            'jQueryUI'
+            , plugin_dir_url( __FILE__ ) . 'jquery-ui-1.11.0.custom/jquery-ui.min.js'
+        );
+
+        wp_localize_script(
+            'commentFieldHandler'
+            , 'fwPlugin'
+            , array( 'page' => basename(get_permalink())
+                    , 'users' => get_users())
+        );
+
+        wp_enqueue_style( 
+            'commentDropdownStyle'
+            , plugin_dir_url( __FILE__ ) . 'commentDropDownStyle.css' 
+        );
+
     }
 }
 

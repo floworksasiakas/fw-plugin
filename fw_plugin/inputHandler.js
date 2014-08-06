@@ -21,7 +21,8 @@ function attachEnterListener(){
                               , getUserId(person)
                               , textContent);
         } else if (type == "Blog"){
-            
+            handler.createBlogPost(postSuccessful
+                                    , textContent);
         }
     });
     
