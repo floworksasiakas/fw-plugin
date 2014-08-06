@@ -18,7 +18,7 @@ function loadComments() {
 
 function httpGet(theUrl) {
     postsFetched = false;
-    $('#tableWrapper').html('Reloading Activity...');
+    $('#activityWrapper').html('Reloading Activity...');
     fadeInResultText();
     
     var jqxhr = $.ajax({
@@ -34,13 +34,13 @@ function httpGet(theUrl) {
 }
 
 function resumeText(){
-    $('#tableWrapper').css('opacity', '1');
+    $('#activityWrapper').css('opacity', '1');
 }
 
 var postsFetched = false;
 function fadeInResultText(){
     
-    $( "#tableWrapper" ).animate({
+    $( "#activityWrapper" ).animate({
         opacity: 0.5
     }, 1000, function() {
         if (!postsFetched)
@@ -50,7 +50,7 @@ function fadeInResultText(){
 
 function fadeOutResultText(){
     
-    $( "#tableWrapper" ).animate({
+    $( "#activityWrapper" ).animate({
         opacity: 1
     }, 1000, function() {
         if (!postsFetched)
@@ -59,7 +59,7 @@ function fadeOutResultText(){
 }
 
 function transformToTable(json) {
-    var elem = document.getElementById("tableWrapper");
+    var elem = document.getElementById("activityWrapper");
     elem.innerHTML = "<dl>";
     
     for (var i = 0; i < 5; i++){
@@ -80,7 +80,7 @@ function endsWith(str, suffix) {
 }
 /*
 function transformToTable(json) {
-    var elem = document.getElementById("tableWrapper");
+    var elem = document.getElementById("activityWrapper");
     elem.innerHTML = "<dl>";
     
     for (var i = 0; i < 5; i++){
