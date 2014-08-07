@@ -83,6 +83,24 @@ JRAHandler.prototype.createStatusPost = function(callback, status){
 };
 
 /**
+ * Creates a blog post as a custom post with the given text.
+ * @param {Function} a callback function for result handling, 
+ * called when the posting is done.
+ * @param {String} the blog text.
+ */
+JRAHandler.prototype.createBlogPost = function(callback, blog){
+    var title = "Blog post";
+
+    post = {
+        "title" : title,
+        "content_raw" : blog,
+        "status" : "publish"
+    }
+
+    this.ajaxPost(callback, post);
+};
+
+/**
  * Posts the given content to the JRA posts endpoint.
  * @param {Function} the callback function for result handling,
  * called when the request is done.

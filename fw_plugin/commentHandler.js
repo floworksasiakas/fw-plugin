@@ -1,17 +1,31 @@
 var $ = jQuery;
 $('document').ready(function(){
-	var userArray = fwPlugin.users;
-	
-	$('#comment').keyup(function(event){
-		word = $('#comment').val();
-
-		for (var i = 0; i < userArray.length; i++){
-			if (userArray[i]['data']['user_nicename'] == word){
-				$('#comment').css("color", "red");
-				break;
-			} else {
-				$('#comment').css("color", "black");
-			}
-		}
-	});
+	attachAutocomplete();
 });
+
+/**
+ * Attaches autocomplete feature to comment section.
+ */
+function attachAutocomplete(){
+	var userArray = fwPlugin.users;
+	var nameArray = [];
+
+	for (var i = 0; i < userArray.length; i++){
+		nameArray[i] = fwPlugin.magicWords['assignment'] 
+						+ " " 
+						+ userArray[i]['data']['user_nicename'];
+	}
+	nameArray[nameArray.length] = fwPlugin.magicWords['in_progress'];
+	nameArray[nameArray.length] = fwPlugin.magicWords['done'];
+
+	$('#comment').autocomplete({
+		source: nameArray
+	});
+}
+
+/**
+ * Returns true if data starts with str, false otherwise.
+ */
+function startsWith(data, str){
+	return data.lastIndexOf(str, 0) === 0;
+}

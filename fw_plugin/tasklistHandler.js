@@ -1,13 +1,23 @@
 var $ = jQuery;
 $('document').ready(function(){
+
+    /** 
+     * Function to handle click on the reload button,
+     * loads the task list and sets the button disabled
+     * until the request is done.
+     */
     $('#taskListReloadButton').on('click', function() {
         loadTaskList();
         $(this).prop("disabled", true)
                .css("background-color", "red");
     });
+
+    loadTaskList();
 });
 
-
+/**
+ * Loads the task list
+ */
 function loadTaskList() {
 
     tasksFetched = false;
@@ -26,6 +36,10 @@ function loadTaskList() {
     });
 }
 
+/**
+ * Maps the post IDs and contents from the json
+ * response to arrays.
+ */
 function traversePostIDs(json){
     var postIDs = [];
     var postContents = [];
@@ -38,6 +52,11 @@ function traversePostIDs(json){
     readMetaDatas(postIDs, postContents);
 }
 
+/**
+ * Reads the meta datas from the posts with the given
+ * ID. Post contents are also needed to preserve the data
+ * through ajax calls.
+ */
 function readMetaDatas(postIDs, postContents){
     createTasklistTable();
     var handler = new JRAHandler();
@@ -46,9 +65,9 @@ function readMetaDatas(postIDs, postContents){
 
         handler.readMeta(function handleResponse(response, index){
             var responseJSON = JSON.parse(JSON.stringify(response));
-            
             var taskStatus;
             var personID;
+
             if (getValue(responseJSON, "postType") == "task"){
                 taskStatus = getValue(responseJSON, "taskStatus");
                 personID = getValue(responseJSON, "taskPerson");
@@ -60,7 +79,9 @@ function readMetaDatas(postIDs, postContents){
     }
 }
 
-// Function works only for JSON REST API provided metadata.
+/**
+ * Gets the value from the given json, that matches the given key.
+ */
 function getValue(json, key){
     for(var i = 0; i < json.length; i++){
         if (json[i]['key'] == key){
@@ -70,6 +91,9 @@ function getValue(json, key){
     return null;
 }
 
+/**
+ * Creates the tasklist table and its headers.
+ */
 function createTasklistTable(){
     $('#tableWrapper').html("<table id='taskTable'></table>");
     $('#taskTable').append("<th>Task</th>"
@@ -79,6 +103,10 @@ function createTasklistTable(){
                          + "<th>Completed</th>");
 }
 
+/**
+ * Adds a task, task's status and the person (from the given personID) 
+ * to the tasklist table.
+ */
 function addToTaskList(task, taskStatus, personID){
     
     var handler = new JRAHandler();
@@ -109,7 +137,15 @@ function addToTaskList(task, taskStatus, personID){
     
 }
 
+/**
+ * Variable used to indicate the state of tasklist request.
+ * True if tasks are fetched, false otherwise.
+ */
 var tasksFetched = false;
+
+/**
+ * Fades in the text indicating the state of tasklist request.
+ */
 function fadeInResultText(){
     
     $( "#tableWrapper" ).animate({
@@ -119,6 +155,9 @@ function fadeInResultText(){
     });
 }
 
+/**
+ * Fades out the text indicating the state of tasklist request.
+ */
 function fadeOutResultText(){
     
     $( "#tableWrapper" ).animate({

@@ -77,6 +77,8 @@ function myplugin_save_meta_box_data( $post_id ) {
         }
     }
 
+    // Passed through the checking, now its safe to save the data.
+    
     if (isset($_POST['postType'])){
         $type = $_POST['postType'];
 
