@@ -1,31 +1,31 @@
 var $ = jQuery;
 $('document').ready(function(){
+	attachAutocomplete();
+});
+
+/**
+ * Attaches autocomplete feature to comment section.
+ */
+function attachAutocomplete(){
 	var userArray = fwPlugin.users;
 	var nameArray = [];
 
-	$('#comment').keyup(function(event){
-		word = $('#comment').val();
-		
-		if (startsWith(word, "!assign")){
-			for (var i = 0; i < userArray.length; i++){
-				nameArray[i] = "!assign " + userArray[i]['data']['user_nicename'];
-			}
-			$('#comment').autocomplete({
-				source: nameArray
-			});
-		}
-		checkWord(word);
-	});
-
-	
-});
-
-function checkWord(word){
-	if (startsWith(word, "!assign")){
-		
+	for (var i = 0; i < userArray.length; i++){
+		nameArray[i] = fwPlugin.magicWords['assignment'] 
+						+ " " 
+						+ userArray[i]['data']['user_nicename'];
 	}
+	nameArray[nameArray.length] = fwPlugin.magicWords['in_progress'];
+	nameArray[nameArray.length] = fwPlugin.magicWords['done'];
+
+	$('#comment').autocomplete({
+		source: nameArray
+	});
 }
 
+/**
+ * Returns true if data starts with str, false otherwise.
+ */
 function startsWith(data, str){
 	return data.lastIndexOf(str, 0) === 0;
 }

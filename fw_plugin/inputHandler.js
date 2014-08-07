@@ -3,6 +3,9 @@ $('document').ready(function(){
     attachEnterListener();
 });
 
+/**
+ * Attaches enter listener to the input field to handle the given input.
+ */
 function attachEnterListener(){
 
     $('#input').bind("enterKey", function(e){
@@ -33,12 +36,19 @@ function attachEnterListener(){
     });
 }
 
+/**
+ * Called just before posting has started to indicate posting progress.
+ */
 function postingStarted(){
     postCreated = false;
     $('#result').html('Creating post...');
     fadeInResultText();
 }
 
+/**
+ * Called after successfully inserting new post.
+ * Refreshes the page immediately.
+ */
 function postSuccessful(){
     postCreated = true;
     $('#result').html('Post created!');
@@ -46,7 +56,15 @@ function postSuccessful(){
     location.href=location.href
 }
 
+/**
+ * Variable used to indicate posting state.
+ * True if post was created, false otherwise.
+ */
 var postCreated = false;
+
+/**
+ * Fades in the text indicating posting state.
+ */
 function fadeInResultText(){
     $( "#result" ).animate({
         opacity: 0.5
@@ -55,6 +73,9 @@ function fadeInResultText(){
     });
 }
 
+/**
+ * Fades out the text indicating posting state.
+ */
 function fadeOutResultText(){
     $( "#result" ).animate({
         opacity: 1
@@ -64,6 +85,9 @@ function fadeOutResultText(){
     });
 }
 
+/**
+ * Changes input fields based on the given type.
+ */
 function changeInputFields(type){
     $('#wrap').html("");
     
@@ -77,6 +101,9 @@ function changeInputFields(type){
     attachEnterListener();
 }
 
+/**
+ * Changes the input fields to match task -type custom post.
+ */
 function changeToTaskInput(){
     var json = JSON.parse(JSON.stringify(fwPluginUsers.users));
     var resultHTML = "Person <br /> <select id='person'>";
@@ -91,6 +118,9 @@ function changeToTaskInput(){
     $('#wrap').html(resultHTML);
 }
 
+/**
+ * Returns the user ID matching the given username.
+ */
 function getUserId(username){
     var json = JSON.parse(JSON.stringify(fwPluginUsers.users));
     for (var i = 0; i < json.length; i++){

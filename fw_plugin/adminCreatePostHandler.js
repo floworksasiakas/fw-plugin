@@ -1,5 +1,8 @@
 var $ = jQuery;
 
+/**
+ * Changes input fields based on the given type.
+ */
 function changeInputFields(type){
 	$('#metaWrapper').html("");
 
@@ -12,6 +15,10 @@ function changeInputFields(type){
     }
 }
 
+/**
+ * Changes the input fields to match task -type custom post.
+ * The fields will be appended to the given html element ID.
+ */
 function changeToTaskType(id){
 	var html = "Person <br /> <select name='taskPerson'>";
 	var hidden = "";
