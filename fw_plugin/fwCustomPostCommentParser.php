@@ -1,6 +1,113 @@
 <?php
 	require_once('class-fwMagicWordReader.php');
 	add_action('wp_insert_comment', 'parseComment', 99, 2);
+	add_action('preprocess_comment', 'preprocessComment');
+
+	/**
+	 * Preprocesses the comment before saving it to the database:
+	 * checks whether the comment has any 'magic words' and handles
+	 * them accordingly.
+	 */
+	function preprocessComment($commentdata){
+		$magicWordReader = new fwMagicWordReader();
+		$commandsArray = $magicWordReader->getMagicWords();
+		
+		$content = $commentdata['comment_content'];
+		$assignmentKeyword = $commandsArray['assignment'];
+		$doneKeyword = $commandsArray['done'];
+		$inprogressKeyword = $commandsArray['in_progress'];
+		
+		$processedString = "";
+		if (contains($content, $assignmentKeyword)){
+			$processedString = processAssignmentContent($content, $assignmentKeyword);
+		}
+
+		if (contains($content, $doneKeyword)){
+			$processedString = processDoneContent($content, $doneKeyword);
+		} else if (contains($content, $inprogressKeyword)){
+			$processedString = processInProgressContent($content, $inprogressKeyword);
+		}
+
+		$commentdata['comment_content'] = $processedString;
+		return $commentdata;
+	}
+
+	/**
+	 * Formats the content properly, if it contains 'in_progress' magic word
+	 * and returns the formatted string containing style related HTML.
+	 */
+	function processInProgressContent($content, $inprogressKeyword){
+		$newstring = changeStyle($inprogressKeyword
+							   , "color"
+							   , "#D1BA0A");
+
+		$finalstring = substr_replace($content
+									  , $newstring
+									  , strpos($content, $inprogressKeyword)
+									  , strlen($inprogressKeyword));
+		return $finalstring;
+	}
+
+	/**
+	 * Formats the content properly, if it contains 'done' magic word
+	 * and returns the formatted string containing style related HTML.
+	 */
+	function processDoneContent($content, $doneKeyword){
+		$newstring = changeStyle($doneKeyword
+								, "color"
+								, "green");
+
+		$finalstring = substr_replace($content
+									  , $newstring
+									  , strpos($content, $doneKeyword)
+									  , strlen($doneKeyword));
+		return $finalstring;
+	}
+
+	/**
+	 * Formats the content properly, if it contains 'assignment' magic word
+	 * and returns the formatted string containing style related HTML.
+	 */
+	function processAssignmentContent($content, $assignmentKeyword){
+		$wordsArray = explode(" ", $content);
+		$personWord = "";
+
+		for ($i = 0; $i < count($wordsArray); $i++){
+			if ($wordsArray[$i] === $assignmentKeyword){
+				if (count($wordsArray) > $i){
+					$personWord = $wordsArray[$i+1];
+				}
+			}
+		}
+
+		$newstring = changeStyle($assignmentKeyword . " " . $personWord
+								 , "color"
+								 , "red");
+
+		$finalstring = substr_replace($content
+									  , $newstring
+									  , strpos($content, $assignmentKeyword)
+									  , strlen($assignmentKeyword . " " . $personWord));
+		return $finalstring;
+	}
+
+	/**
+	 * Changes the given content's style attribute to the given value.
+	 */
+	function changeStyle($content, $attribute, $value){
+		return "<b style='" . $attribute . ":" . $value . ";'> " . $content . " </b>";
+	}
+
+	/**
+	 * Returns true if given string haystack contains given string needle,
+	 * false otherwise.
+	 */
+	function contains($haystack, $needle){
+		if (strpos($haystack, $needle) !== false) {
+			return true;
+		}
+		return false;
+	}
 
 	/**
 	 * Parses the comment and handles it accordingly:
@@ -17,15 +124,14 @@
 	function parseComment($commentID, $commentObject){
 		$magicWordReader = new fwMagicWordReader();
 		$commandsArray = $magicWordReader->getMagicWords();
-		
 		$postID = $commentObject->comment_post_ID;
 		$commentContent = $commentObject->comment_content;
 
-		if (startsWith($commentContent, $commandsArray['done'])){
+		if (contains($commentContent, $commandsArray['done'])){
 			update_post_meta($postID, 'taskStatus', 3);
-		} else if (startsWith($commentContent, $commandsArray['in_progress'])){
+		} else if (contains($commentContent, $commandsArray['in_progress'])){
 			update_post_meta($postID, 'taskStatus', 2);
-		} else if (startsWith($commentContent, $commandsArray['assignment'])){
+		} else if (contains($commentContent, $commandsArray['assignment'])){
 			$person = getPerson($commentContent, $commandsArray['assignment']);
 			$id = getPersonId($person);
 			update_post_meta($postID, 'taskPerson', $id);
@@ -37,8 +143,18 @@
 	 * stripping the given prefix away.
 	 */
 	function getPerson($commentContent, $prefix){
-		return trim(substr($commentContent
-					       , strrpos($commentContent, $prefix) + strlen($prefix)));
+		$wordsArray = explode(" ", $commentContent);
+
+		$person = "";
+		for ($i = 0; $i < count($wordsArray); $i++){
+			if ($wordsArray[$i] === $prefix){
+				if (count($wordsArray) > $i){
+					$person = $wordsArray[$i+1];
+				}
+			}
+		}
+
+		return $person;
 	}
 
 	/**
