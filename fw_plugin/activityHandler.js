@@ -1,6 +1,6 @@
 $('document').ready(function(){
     $('#activityReloadButton').on('click', function() {
-        $(this).prop("disabled", true)
+        $(this).prop("disabled", false)
                .css("background-color", "red");
         
     });
@@ -8,14 +8,14 @@ $('document').ready(function(){
 
 
 function loadPosts() {
-	httpGet("/wp-json/posts");
+	httpGetPosts("/wp-json/posts");
 }
 
 function loadComments() {
-    httpGet("/wp-json/posts/0/comments");
+    httpGetComments("/wp-json/posts/0/comments");
 }
 
-function httpGet(theUrl) {
+function httpGetComments(theUrl) {
     postsFetched = false;
     $('#activityWrapper').html('Reloading Activity...');
     fadeInResultText();
@@ -37,8 +37,8 @@ function resumeText(){
 }
 
 var postsFetched = false;
+
 function fadeInResultText(){
-    
     $( "#activityWrapper" ).animate({
         opacity: 0.5
     }, 1000, function() {
@@ -62,7 +62,7 @@ function transformToTable(json) {
     elem.innerHTML = "<dl>";
     
     for (var i = 0; i < 5; i++){
-        if (json[i]['type'], "post"){
+        if (json[i]['type'], "comment"){
             elem.innerHTML += "<dt>"
                            +  json[i]['title']
 						   +  "</dt>"
