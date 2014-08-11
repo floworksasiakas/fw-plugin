@@ -22,7 +22,7 @@ function loadTaskList() {
 
     tasksFetched = false;
     $('#tableWrapper').html('Fetching tasks...');
-    fadeInResultText();
+    tasklistFadeInResultText();
     
     var handler = new JRAHandler();
     handler.readAllPosts(function handleResponse(data){
@@ -146,24 +146,24 @@ var tasksFetched = false;
 /**
  * Fades in the text indicating the state of tasklist request.
  */
-function fadeInResultText(){
+function tasklistFadeInResultText(){
     
     $( "#tableWrapper" ).animate({
         opacity: 0.5
     }, 1000, function() {
-        fadeOutResultText();
+        tasklistFadeOutResultText();
     });
 }
 
 /**
  * Fades out the text indicating the state of tasklist request.
  */
-function fadeOutResultText(){
+function tasklistFadeOutResultText(){
     
     $( "#tableWrapper" ).animate({
         opacity: 1
     }, 1000, function() {
         if (!tasksFetched)
-            fadeInResultText();
+            tasklistFadeInResultText();
     });
 }
