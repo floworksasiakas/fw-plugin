@@ -10,5 +10,9 @@
     wp_enqueue_script('JRAHandlerScript', $JRAHandlerPath);
     wp_enqueue_script('tasklistHandlerScript', $tasklistHandlerPath);
 
-    wp_localize_script('JRAHandlerScript', 'fwPluginUrl', array( 'siteurl' => get_option('siteurl') ));
+    wp_localize_script(
+    	'JRAHandlerScript'
+    	, 'fwPluginUrl'
+    	, array('siteurl' => get_option('siteurl'))
+    );
 ?>

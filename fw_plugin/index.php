@@ -26,23 +26,39 @@ function fw_load_widget() {
 
 /**
  * Enqueues the scripts and localizes the data needed for that script
- * to admin side post creation page.
+ * in the corresponding admin side page.
  */
 function postPageEnqueue($hook) {
-    if( 'post-new.php' != $hook )
-        return;
-    
-    wp_enqueue_script(
-        'adminCreatePostScript'
-        , plugin_dir_url( __FILE__ ) . 'adminCreatePostHandler.js'
-    );
 
-    wp_localize_script(
-        'adminCreatePostScript'
-        , 'fwPluginUsers'
-        , array( 'users' => get_users()
-               , 'plugin_url' => plugins_url())
-    );
+    if('post-new.php' == $hook){
+        wp_enqueue_script(
+            'adminCreatePostScript'
+            , plugin_dir_url( __FILE__ ) . 'adminCreatePostHandler.js'
+        );
+
+        wp_localize_script(
+            'adminCreatePostScript'
+            , 'fwPluginUsers'
+            , array( 'users' => get_users()
+                   , 'plugin_url' => plugins_url())
+        );
+    } else if ('toplevel_page_create-project-page' == $hook){
+        wp_enqueue_script(
+            'adminCreateProjectPageScript'
+            , plugin_dir_url( __FILE__ ) . 'adminCreateProjectPageHandler.js'
+        );
+
+        wp_enqueue_script(
+            'JRAHandlerScript'
+            , plugin_dir_url( __FILE__ ) . 'JRAHandler.js'
+        );
+
+        wp_localize_script(
+            'JRAHandlerScript'
+            , 'fwPluginUrl'
+            , array('siteurl' => get_option('siteurl'))
+        );
+    }
 }
 
 /**
@@ -83,10 +99,27 @@ function enqueueNonAdminScripts() {
     }
 }
 
+function fwPluginMenu() {
+    add_menu_page( 'FW-Project-Page'
+                   , 'Create a new project page'
+                   , 'manage_options'
+                   , 'create-project-page'
+                   , 'createProjectPage'
+                   , 'dashicons-hammer' );
+}
+
+function createProjectPage() {
+    if ( !current_user_can( 'manage_options' ) )  {
+        wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+    }
+    require_once('adminCreateProjectPage.php');
+}
+
 require_once('adminCustomPostMetaBoxLogic.php');
 require_once('fwCustomPostCommentParser.php');
 require_once('class-fwMagicWordReader.php');
 
+add_action('admin_menu', 'fwPluginMenu');
 add_action('admin_enqueue_scripts', 'postPageEnqueue');
 add_action('widgets_init', 'fw_load_widget');
 add_action('add_meta_boxes', 'myplugin_add_meta_box');

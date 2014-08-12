@@ -2,10 +2,38 @@
  * Default constructor
  */
 function JRAHandler(){
-    this.rootUsersUrl = fwPluginUrl.siteurl + "/wp-json/users"
+    this.rootUsersUrl = fwPluginUrl.siteurl + "/wp-json/users";
     this.rootPostsUrl = fwPluginUrl.siteurl + "/wp-json/posts";
 	this.allPostsUrl = this.rootPostsUrl + "?filter[posts_per_page]=-1";
+    this.rootPagesUrl = fwPluginUrl.siteurl + "/wp-json/pages";
 }
+
+JRAHandler.prototype.createNewPage = function(callback, pageTitle){
+
+    var parent = {
+        "title": "asd regards asaad"
+    }
+
+    var post = {
+        "title" : pageTitle,
+        "type" : "page",
+        "status" : "publish",
+        "parent" : 219 //parent page's ID
+    }
+
+    $.ajax({
+        type: "POST",
+        url: this.rootPagesUrl,
+        data: JSON.stringify(post),
+        cache: false
+    }).done(function(data, text) {
+        alert('success');
+    }).error(function(jqxhr, type, text){
+        if (text == "Forbidden"){
+            alert("You don't have the rights to do that :(");
+        }
+    });
+};
 
 /**
  * Reads all posts of the WordPress page.
