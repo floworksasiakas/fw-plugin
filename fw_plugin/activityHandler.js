@@ -16,6 +16,9 @@ function loadComments() {
 }
 
 function httpGetComments(theUrl) {
+/*
+* function httpGetPosts(theUrl) { ....
+*/
     postsFetched = false;
     $('#activityWrapper').html('Reloading Activity...');
     fadeInResultText();
@@ -62,29 +65,14 @@ function transformToTable(json) {
     elem.innerHTML = "<dl>";
     
     for (var i = 0; i < 5; i++){
-        if (json[i]['type'], "comment"){
             elem.innerHTML += "<dt>"
+            			   +  json[i]['date']
+            			   + "<br>"
                            +  json[i]['title']
 						   +  "</dt>"
 						   +  "<dd>"
                            +  json[i]['content']
                            +  "</dd>";
-        }
-    }
-    elem.innerHTML += "</dt>";
-}
-/*
-function transformToTable(json) {
-    var elem = document.getElementById("activityWrapper");
-    elem.innerHTML = "<dl>";
-    
-    for (var i = 0; i < 5; i++){
-        if (json[i]['type'], "comment"){
-            elem.innerHTML += "<dt>"
-                           +  json[i]['content']
-						   +  "</dt>";
-        }
     }
     elem.innerHTML += "</dl>";
 }
-*/
