@@ -33,7 +33,7 @@
 	}
 
 	/**
-	 * Formats the content properly, if it contains 'in_progress' magic word
+	 * Formats the content properly if it contains 'in_progress' magic word
 	 * and returns the formatted string containing style related HTML.
 	 */
 	function processInProgressContent($content, $inprogressKeyword){
@@ -49,7 +49,7 @@
 	}
 
 	/**
-	 * Formats the content properly, if it contains 'done' magic word
+	 * Formats the content properly if it contains 'done' magic word
 	 * and returns the formatted string containing style related HTML.
 	 */
 	function processDoneContent($content, $doneKeyword){
@@ -65,7 +65,7 @@
 	}
 
 	/**
-	 * Formats the content properly, if it contains 'assignment' magic word
+	 * Formats the content properly if it contains 'assignment' magic word
 	 * and returns the formatted string containing style related HTML.
 	 */
 	function processAssignmentContent($content, $assignmentKeyword){

@@ -58,7 +58,32 @@ function postPageEnqueue($hook) {
             , 'fwPluginUrl'
             , array('siteurl' => get_option('siteurl'))
         );
+
+        wp_localize_script(
+            'adminCreateProjectPageScript'
+            , 'fwPlugin'
+            , array('users' => get_users())
+        );
+
+        includeJQueryUI();
     }
+}
+
+function includeJQueryUI(){
+    wp_enqueue_style(
+        'jQueryUIStyle'
+        , plugin_dir_url( __FILE__ ) . 'jquery-ui-1.11.0.custom/jquery-ui.min.css'
+    );
+
+    wp_enqueue_script(
+        'jQuery'
+        , plugin_dir_url( __FILE__ ) . 'jquery-ui-1.11.0.custom/external/jquery/jquery.js'
+    );
+
+    wp_enqueue_script(
+        'jQueryUI'
+        , plugin_dir_url( __FILE__ ) . 'jquery-ui-1.11.0.custom/jquery-ui.min.js'
+    );
 }
 
 /**
@@ -73,20 +98,7 @@ function enqueueNonAdminScripts() {
             , array( 'jquery' )   
         );
 
-        wp_enqueue_style(
-            'jQueryUIStyle'
-            , plugin_dir_url( __FILE__ ) . 'jquery-ui-1.11.0.custom/jquery-ui.min.css'
-        );
-
-        wp_enqueue_script(
-            'jQuery'
-            , plugin_dir_url( __FILE__ ) . 'jquery-ui-1.11.0.custom/external/jquery/jquery.js'
-        );
-
-        wp_enqueue_script(
-            'jQueryUI'
-            , plugin_dir_url( __FILE__ ) . 'jquery-ui-1.11.0.custom/jquery-ui.min.js'
-        );
+        includeJQueryUI();
         
         $magicWordReader = new fwMagicWordReader();
         $magicWords = $magicWordReader->getMagicWords();
