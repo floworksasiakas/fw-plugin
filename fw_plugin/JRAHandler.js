@@ -2,9 +2,53 @@
  * Default constructor
  */
 function JRAHandler(){
-    this.rootUsersUrl = fwPluginUrl.siteurl + "/wp-json/users"
+    this.rootUsersUrl = fwPluginUrl.siteurl + "/wp-json/users";
     this.rootPostsUrl = fwPluginUrl.siteurl + "/wp-json/posts";
 	this.allPostsUrl = this.rootPostsUrl + "?filter[posts_per_page]=-1";
+    this.rootPagesUrl = fwPluginUrl.siteurl + "/wp-json/pages";
+}
+
+JRAHandler.prototype.createNewProjectPage = function(callback, pageTitle, pageID, collaborators){
+
+    var post = {
+        "title" : pageTitle,
+        "type" : "page",
+        "status" : "publish",
+        "parent" : pageID
+    }
+
+    $.ajax({
+        type: "POST",
+        url: this.rootPagesUrl,
+        data: JSON.stringify(post),
+        cache: false
+    }).done(function(data, text) {
+        callback();
+    }).error(function(jqxhr, type, text){
+        if (text == "Forbidden"){
+            alert("You don't have the rights to do that :(");
+        }
+    });
+};
+
+JRAHandler.prototype.getPageID = function(callback, parentPage){
+    var pagesJSON;
+
+    if (parentPage === 0){
+        callback(0);
+    } else {
+        $.ajax({
+            url: this.rootPagesUrl
+        }, 'json').done(function(data) {
+            pagesJSON = JSON.parse(JSON.stringify(data));
+            
+            for (var i = 0; i < pagesJSON.length; i++){
+                if (pagesJSON[i]['title'] === parentPage){
+                    callback(pagesJSON[i]['ID']);
+                }
+            }
+        });
+    }
 }
 
 /**
