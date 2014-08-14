@@ -6,16 +6,16 @@ function JRAHandler(){
     this.rootPostsUrl = fwPluginUrl.siteurl + "/wp-json/posts";
 	this.allPostsUrl = this.rootPostsUrl + "?filter[posts_per_page]=-1";
     this.rootPagesUrl = fwPluginUrl.siteurl + "/wp-json/pages";
+    this.userProjectMetaUrl = fwPluginUrl.siteurl + "/wp-content/plugins/fw_plugin/fwUpdateUserProjectMeta.php";
 }
 
-JRAHandler.prototype.createNewProjectPage = function(callback, pageTitle, pageID, collaborators){
-
+JRAHandler.prototype.createNewProjectPage = function(callback, pageTitle, pageID){
     var post = {
         "title" : pageTitle,
         "type" : "page",
         "status" : "publish",
         "parent" : pageID
-    }
+    };
 
     $.ajax({
         type: "POST",
@@ -24,6 +24,40 @@ JRAHandler.prototype.createNewProjectPage = function(callback, pageTitle, pageID
         cache: false
     }).done(function(data, text) {
         callback();
+    }).error(function(jqxhr, type, text){
+        if (text == "Forbidden"){
+            alert("You don't have the rights to do that :(");
+        }
+    });
+};
+
+JRAHandler.prototype.updateUserProjectMeta = function(callback, pageTitle, userID){
+    $.ajax({
+        type: "GET",
+        url: this.userProjectMetaUrl + "?pageTitle=" + pageTitle + "&userID=" + userID,
+        cache: false
+    }).done(function(data, text) {
+        alert(data);
+        callback(data);
+    }).error(function(jqxhr, type, text){
+        if (text == "Forbidden"){
+            alert("You don't have the rights to do that :(");
+        }
+    });
+};
+
+JRAHandler.prototype.getUserID = function(callback, userName){
+    $.ajax({
+        type: "GET",
+        url: this.rootUsersUrl,
+        cache: false
+    }).done(function(data, text) {
+        var responseJSON = JSON.parse(JSON.stringify(data));
+        for (var i = 0; i < responseJSON.length; i++){
+            if (responseJSON[i]['username'] == userName){
+                callback(responseJSON[i]['ID']);
+            }
+        }
     }).error(function(jqxhr, type, text){
         if (text == "Forbidden"){
             alert("You don't have the rights to do that :(");
@@ -49,7 +83,7 @@ JRAHandler.prototype.getPageID = function(callback, parentPage){
             }
         });
     }
-}
+};
 
 /**
  * Reads all posts of the WordPress page.
@@ -57,13 +91,11 @@ JRAHandler.prototype.getPageID = function(callback, parentPage){
  * called when the request is done.
  */
 JRAHandler.prototype.readAllPosts = function(callback){
-
 	$.ajax({
         url: this.allPostsUrl
     }, 'json').done(function(data) {
     	callback(JSON.stringify(data));
     });
-
 };
 
 /**
