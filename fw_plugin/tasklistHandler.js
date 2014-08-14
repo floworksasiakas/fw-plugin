@@ -1,6 +1,7 @@
 var $ = jQuery;
 $('document').ready(function(){
-
+    alert(fwPluginUrl.currentUser.data.user_nicename);
+    
     /** 
      * Function to handle click on the reload button,
      * loads the task list and sets the button disabled

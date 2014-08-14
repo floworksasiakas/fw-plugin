@@ -13,6 +13,7 @@
     wp_localize_script(
     	'JRAHandlerScript'
     	, 'fwPluginUrl'
-    	, array('siteurl' => get_option('siteurl'))
+    	, array('siteurl' => get_option('siteurl'),
+                'currentUser' => wp_get_current_user())
     );
 ?>
