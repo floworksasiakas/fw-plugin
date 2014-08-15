@@ -7,17 +7,15 @@ $('document').ready(function(){
 		nameArray[i] = fwPlugin.users[i]['data']['user_nicename'];
 	}
 
-	$('.collaboratorField').autocomplete({
-		source: nameArray
-	});
-
 	$('#addNewCollaborator').click(function(event){
 		var collaboratorCount = $('.collaboratorField').length;
-		$('#collaboratorFields').append("<br /><input type='text' class='collaboratorField'></input>");
 
-		$('.collaboratorField').autocomplete({
-			source: nameArray
-		});
+		var appendHTML = "<br /><select class='collaboratorField'>";
+		for (var i = 0; i < nameArray.length; i++){
+			appendHTML += "<option value='" + nameArray[i] + "'>" + nameArray[i] + "</option>";
+		}
+		appendHTML += "</select>";
+		$('#collaboratorFields').append(appendHTML);
 
 		if ($('#deleteCollaborator').length === 0){
 			$('#collaboratorArea').append("<input type='button' value='Delete collaborator' id='deleteCollaborator'></input>");
@@ -40,18 +38,19 @@ $('document').ready(function(){
 			parentPage = existingPage;
 		}
 
-		var collaborators = document.getElementsByClassName('collaboratorField');
-		var collaboratorNames = [];
-		
-		for (var i = 0; i < collaborators.length; i++){
-			collaboratorNames[i] = collaborators[i].value;
-		}
 		createProjectPage(parentPage, projectName);
-		updateUserProjectMetadata(collaboratorNames, projectName);
 	});
 });
 
-function updateUserProjectMetadata(collaboratorNames, projectName){
+function storeUserProjectMeta(pageID){
+	var collaborators = document.getElementsByClassName('collaboratorField');
+	var collaboratorNames = [];
+	var projectName = $('#projectName').val();
+	
+	for (var i = 0; i < collaborators.length; i++){
+		collaboratorNames[i] = collaborators[i].value;
+	}
+
 	var handler = new JRAHandler();
 	// Get all user IDs that match the collaborator list.
 	for (var i = 0; i < collaboratorNames.length; i++){
@@ -61,7 +60,8 @@ function updateUserProjectMetadata(collaboratorNames, projectName){
 			// with info about the newly created project page.
 			handler.updateUserProjectMeta(userMetaUpdateSuccessfull
 										  , projectName
-										  , userID);
+										  , userID
+										  , pageID);
 
 		}, collaboratorNames[i]);
 	}
@@ -70,12 +70,12 @@ function updateUserProjectMetadata(collaboratorNames, projectName){
 function createProjectPage(parentPage, projectName){
 	var handler = new JRAHandler();
 	// Gets the page ID that matches the parentPage parameter.
-	handler.getPageID(function(pageID){
+	handler.getParentPageID(function(parentPageID){
 
 		// When pageID has been found, create the project page.
 		handler.createNewProjectPage(pageCreationSuccessfull
 									, projectName
-									, pageID);
+									, parentPageID);
 
 	}, parentPage);
 }
@@ -84,8 +84,11 @@ function userMetaUpdateSuccessfull(){
 	alert('User metadata updated!');
 }
 
-function pageCreationSuccessfull(){
-	alert('Page created!');
+function pageCreationSuccessfull(pageName){
+	var handler = new JRAHandler();
+	handler.getPageID(function(pageID){
+		storeUserProjectMeta(pageID);
+	}, pageName);
 }
 
 function deleteCollaborator(){

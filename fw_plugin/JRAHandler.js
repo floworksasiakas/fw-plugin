@@ -10,20 +10,31 @@ function JRAHandler(){
 }
 
 JRAHandler.prototype.createNewProjectPage = function(callback, pageTitle, pageID){
+
+    var pageType = {
+        "key" : "pageType",
+        "value" : "projectPage"
+    };
+
+    var postMeta = [
+        pageType
+    ];
+
     var post = {
         "title" : pageTitle,
         "type" : "page",
         "status" : "publish",
-        "parent" : pageID
+        "parent" : pageID,
+        "post_meta" : postMeta
     };
 
     $.ajax({
         type: "POST",
-        url: this.rootPagesUrl,
+        url: this.rootPostsUrl,
         data: JSON.stringify(post),
         cache: false
     }).done(function(data, text) {
-        callback();
+        callback(pageTitle);
     }).error(function(jqxhr, type, text){
         if (text == "Forbidden"){
             alert("You don't have the rights to do that :(");
@@ -31,13 +42,31 @@ JRAHandler.prototype.createNewProjectPage = function(callback, pageTitle, pageID
     });
 };
 
-JRAHandler.prototype.updateUserProjectMeta = function(callback, pageTitle, userID){
+JRAHandler.prototype.getPageID = function(callback, pageName){
+    $.ajax({
+        url: this.rootPagesUrl
+    }, 'json').done(function(data) {
+        var responseJSON = JSON.parse(JSON.stringify(data));
+
+        for (var i = 0; i < responseJSON.length; i++){
+            if (responseJSON[i]['title'] == pageName){
+                callback(responseJSON[i]['ID']);
+            }
+        }
+    });
+}
+
+JRAHandler.prototype.updateUserProjectMeta = function(callback, pageTitle, userID, pageID){
     $.ajax({
         type: "GET",
-        url: this.userProjectMetaUrl + "?pageTitle=" + pageTitle + "&userID=" + userID,
+        url: this.userProjectMetaUrl + "?pageTitle=" 
+                                     + pageTitle 
+                                     + "&userID=" 
+                                     + userID
+                                     + "&pageID="
+                                     + pageID,
         cache: false
     }).done(function(data, text) {
-        alert(data);
         callback(data);
     }).error(function(jqxhr, type, text){
         if (text == "Forbidden"){
@@ -65,7 +94,7 @@ JRAHandler.prototype.getUserID = function(callback, userName){
     });
 };
 
-JRAHandler.prototype.getPageID = function(callback, parentPage){
+JRAHandler.prototype.getParentPageID = function(callback, parentPage){
     var pagesJSON;
 
     if (parentPage === 0){
@@ -106,7 +135,7 @@ JRAHandler.prototype.readAllPosts = function(callback){
  * @param {Integer} the ID of the person.
  * @param {String} the task.
  */
-JRAHandler.prototype.createTask = function(callback, person, personID, task) {
+JRAHandler.prototype.createTask = function(callback, person, personID, task, project, projectID) {
 	var title = person + "'s task";
 
     var taskStatus = {
@@ -124,10 +153,22 @@ JRAHandler.prototype.createTask = function(callback, person, personID, task) {
         "value" : personID
     }
 
+    var projectName = {
+        "key" : "projectName",
+        "value" : project
+    }
+
+    var projectIDMeta = {
+        "key" : "projectID",
+        "value" : projectID
+    }
+
     var postMetaData = [
         taskStatus,
         postType,
-        taskPerson
+        taskPerson,
+        projectName,
+        projectIDMeta
     ]
             
     post = {
@@ -213,7 +254,7 @@ JRAHandler.prototype.readMeta = function(callback, metaUrl, index){
     }).done(function(response){
         callback(response, index);
     });
-}
+};
 
 /**
  * Reads the JSON REST API endpoint of the given user ID.
@@ -228,4 +269,4 @@ JRAHandler.prototype.readUsersUrl = function(callback, userID){
     }).done(function(response){
         callback(response);
     });
-}
+};

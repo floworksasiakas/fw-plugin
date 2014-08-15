@@ -1,6 +1,6 @@
 var $ = jQuery;
 $('document').ready(function(){
-    alert(fwPluginUrl.currentUser.data.user_nicename);
+    //alert(fwPluginUrl.currentUserProjectIDs);
     
     /** 
      * Function to handle click on the reload button,
@@ -70,6 +70,9 @@ function readMetaDatas(postIDs, postContents){
             var personID;
 
             if (getValue(responseJSON, "postType") == "task"){
+                if (getValue(responseJSON, "projectName") == fwPluginUrl.currentPage){
+                    alert("Current page is: " + fwPluginUrl.currentPage);
+                }
                 taskStatus = getValue(responseJSON, "taskStatus");
                 personID = getValue(responseJSON, "taskPerson");
                 addToTaskList(postContents[index], taskStatus, personID);

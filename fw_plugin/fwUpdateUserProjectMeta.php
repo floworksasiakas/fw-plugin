@@ -5,15 +5,13 @@
 
 		$userID = $_GET['userID'];
 		$pageTitle = $_GET['pageTitle'];
+		$pageID = $_GET['pageID'];
 		$projectsKey = 'projects';
+		$projectsIDKey = 'projectIDs';
 
 		//update_user_meta($userID, $projectsKey, $pageTitle);
 		add_user_meta($userID, $projectsKey, $pageTitle);
-		$currentProjects = get_user_meta($userID);
+		add_user_meta($userID, $projectsIDKey, $pageID);
 
-		//echo $currentProjects['projects'];
-		for($i = 0; $i < count($currentProjects['projects']); $i++){
-			echo $currentProjects['projects'][$i] . "\n";
-		}
 	}
 ?>

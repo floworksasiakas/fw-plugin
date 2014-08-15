@@ -33,10 +33,16 @@ function checkPostType(){
                                 , textContent);
     } else if (type == "Task"){
         var person = $('#person').val();
-        handler.createTask(postSuccessful
-                          , person
-                          , getUserId(person)
-                          , textContent);
+        var project = $('#project').val();
+
+        handler.getPageID(function(projectID){
+            handler.createTask(postSuccessful
+                              , person
+                              , getUserId(person)
+                              , textContent
+                              , project
+                              , projectID);
+        }, project);
     } else if (type == "Blog"){
         handler.createBlogPost(postSuccessful
                                 , textContent);
@@ -112,17 +118,25 @@ function changeInputFields(type){
  * Changes the input fields to match task -type custom post.
  */
 function changeToTaskInput(){
-    var json = JSON.parse(JSON.stringify(fwPluginUsers.users));
+    var usersJSON = JSON.parse(JSON.stringify(fwPluginUsers.users));
+    var projectPagesJSON = JSON.parse(JSON.stringify(fwPluginUsers.projectPages));
+
+    var projectPagesResultHTML = "Project <br /> <select id='project'>";
+    for (var i = 0; i < projectPagesJSON.length; i++){
+        var projectPage = projectPagesJSON[i]['post_title'];
+        projectPagesResultHTML += "<option value='" + projectPage + "'>" + projectPage + "</option>";
+    }
+    projectPagesResultHTML += "</select><br />";
+
     var resultHTML = "Person <br /> <select id='person'>";
-    for (var i = 0; i < json.length; i++){
-        var user = json[i]['data']['user_nicename'];
+    for (var i = 0; i < usersJSON.length; i++){
+        var user = usersJSON[i]['data']['user_nicename'];
         resultHTML += "<option value='" + user + "'>" + user + "</option>";
     }
     resultHTML += "</select><br />";
-
     resultHTML += "Task: <br /> <input id='input' type='text'></input>";
 
-    $('#wrap').html(resultHTML);
+    $('#wrap').html(projectPagesResultHTML + resultHTML);
 }
 
 /**

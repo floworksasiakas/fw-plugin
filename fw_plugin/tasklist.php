@@ -10,10 +10,20 @@
     wp_enqueue_script('JRAHandlerScript', $JRAHandlerPath);
     wp_enqueue_script('tasklistHandlerScript', $tasklistHandlerPath);
 
+    $currentUserID = get_current_user_id();
+    $projectIDs = get_user_meta($currentUserID, 'projectIDs');
+
     wp_localize_script(
     	'JRAHandlerScript'
     	, 'fwPluginUrl'
-    	, array('siteurl' => get_option('siteurl'),
-                'currentUser' => wp_get_current_user())
+    	, array('siteurl' => get_option('siteurl')
+                , 'currentUserProjectIDs' => $projectIDs
+                , 'currentPage' => basename(get_permalink()))
     );
+
+    /*
+    $projects = get_user_meta(1, 'projectIDs');
+    foreach ($projects as $project){
+        echo $project . "\n";
+    }*/
 ?>

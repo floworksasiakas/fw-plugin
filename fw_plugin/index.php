@@ -64,8 +64,6 @@ function postPageEnqueue($hook) {
             , 'fwPlugin'
             , array('users' => get_users())
         );
-
-        includeJQueryUI();
     }
 }
 
