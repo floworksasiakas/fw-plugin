@@ -1,3 +1,4 @@
+waiting : #waiting
 done : #done
 in_progress : #inprogress
 assignment : !assign

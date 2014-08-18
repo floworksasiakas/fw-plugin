@@ -15,6 +15,7 @@ function attachAutocomplete(){
 						+ " " 
 						+ userArray[i]['data']['user_nicename'];
 	}
+	nameArray[nameArray.length] = fwPlugin.magicWords['waiting'];
 	nameArray[nameArray.length] = fwPlugin.magicWords['in_progress'];
 	nameArray[nameArray.length] = fwPlugin.magicWords['done'];
 

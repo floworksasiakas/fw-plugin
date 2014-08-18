@@ -14,6 +14,7 @@
 		
 		$content = $commentdata['comment_content'];
 		$assignmentKeyword = $commandsArray['assignment'];
+		$waitingKeyword = $commandsArray['waiting'];
 		$doneKeyword = $commandsArray['done'];
 		$inprogressKeyword = $commandsArray['in_progress'];
 		
@@ -23,9 +24,11 @@
 		}
 
 		if (contains($content, $doneKeyword)){
-			$processedString = processDoneContent($content, $doneKeyword);
+			$processedString = processTaskStatusContent($content, $doneKeyword, "green");
 		} else if (contains($content, $inprogressKeyword)){
-			$processedString = processInProgressContent($content, $inprogressKeyword);
+			$processedString = processTaskStatusContent($content, $inprogressKeyword, "yellow");
+		} else if (contains($content, $waitingKeyword)){
+			$processedString = processTaskStatusContent($content, $waitingKeyword, "red");
 		}
 
 		$commentdata['comment_content'] = $processedString;
@@ -33,34 +36,18 @@
 	}
 
 	/**
-	 * Formats the content properly if it contains 'in_progress' magic word
+	 * Formats the content text color with the given color
 	 * and returns the formatted string containing style related HTML.
 	 */
-	function processInProgressContent($content, $inprogressKeyword){
-		$newstring = changeStyle($inprogressKeyword
+	function processTaskStatusContent($content, $keyWord, $color){
+		$newstring = changeStyle($keyWord
 							   , "color"
-							   , "#D1BA0A");
+							   , $color);
 
 		$finalstring = substr_replace($content
 									  , $newstring
-									  , strpos($content, $inprogressKeyword)
-									  , strlen($inprogressKeyword));
-		return $finalstring;
-	}
-
-	/**
-	 * Formats the content properly if it contains 'done' magic word
-	 * and returns the formatted string containing style related HTML.
-	 */
-	function processDoneContent($content, $doneKeyword){
-		$newstring = changeStyle($doneKeyword
-								, "color"
-								, "green");
-
-		$finalstring = substr_replace($content
-									  , $newstring
-									  , strpos($content, $doneKeyword)
-									  , strlen($doneKeyword));
+									  , strpos($content, $keyWord)
+									  , strlen($keyWord));
 		return $finalstring;
 	}
 
@@ -82,7 +69,7 @@
 
 		$newstring = changeStyle($assignmentKeyword . " " . $personWord
 								 , "color"
-								 , "red");
+								 , "brown");
 
 		$finalstring = substr_replace($content
 									  , $newstring
@@ -127,7 +114,9 @@
 		$postID = $commentObject->comment_post_ID;
 		$commentContent = $commentObject->comment_content;
 
-		if (contains($commentContent, $commandsArray['done'])){
+		if (contains($commentContent, $commandsArray['waiting'])){
+			update_post_meta($postID, 'taskStatus', 1);
+		} else if (contains($commentContent, $commandsArray['done'])){
 			update_post_meta($postID, 'taskStatus', 3);
 		} else if (contains($commentContent, $commandsArray['in_progress'])){
 			update_post_meta($postID, 'taskStatus', 2);
