@@ -18,7 +18,8 @@
     	, 'fwPluginUrl'
     	, array('siteurl' => get_option('siteurl')
                 , 'currentUserProjectIDs' => $projectIDs
-                , 'currentPage' => basename(get_permalink()))
+                , 'currentPageID' => get_the_ID()
+                , 'isHomePage' => is_home())
     );
 
     /*

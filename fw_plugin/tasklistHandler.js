@@ -1,6 +1,5 @@
 var $ = jQuery;
 $('document').ready(function(){
-    //alert(fwPluginUrl.currentUserProjectIDs);
     
     /** 
      * Function to handle click on the reload button,
@@ -8,13 +7,34 @@ $('document').ready(function(){
      * until the request is done.
      */
     $('#taskListReloadButton').on('click', function() {
-        loadTaskList();
-        $(this).prop("disabled", true)
-               .css("background-color", "red");
+        if (currentUserCanViewProject()){
+            loadTaskList();
+            $(this).prop("disabled", true)
+                   .css("background-color", "red");
+        } else {
+            alert("User not authorized to view project");
+        }
     });
 
-    loadTaskList();
+    if (currentUserCanViewProject()){
+        loadTaskList();
+    }
 });
+
+function currentUserCanViewProject(){
+    if (fwPluginUrl.isHomePage){
+        return true;
+    }
+
+    var userProjects = fwPluginUrl.currentUserProjectIDs;
+
+    for (var i = 0; i < userProjects.length; i++){
+        if (userProjects[i] == fwPluginUrl.currentPageID){
+            return true;
+        }
+    }
+    return false;
+}
 
 /**
  * Loads the task list
@@ -26,6 +46,7 @@ function loadTaskList() {
     tasklistFadeInResultText();
     
     var handler = new JRAHandler();
+
     handler.readAllPosts(function handleResponse(data){
 
         tasksFetched = true;
@@ -68,19 +89,31 @@ function readMetaDatas(postIDs, postContents){
             var responseJSON = JSON.parse(JSON.stringify(response));
             var taskStatus;
             var personID;
+            var taskProjectID = getValue(responseJSON, "projectID");
 
             if (getValue(responseJSON, "postType") == "task"){
-                if (getValue(responseJSON, "projectName") == fwPluginUrl.currentPage){
-                    alert("Current page is: " + fwPluginUrl.currentPage);
+                if (fwPluginUrl.isHomePage && isUserTask(taskProjectID, fwPluginUrl.currentUserProjectIDs)){
+                    taskStatus = getValue(responseJSON, "taskStatus");
+                    personID = getValue(responseJSON, "taskPerson");
+                    addToTaskList(postContents[index], taskStatus, personID);
+                } else if (taskProjectID == fwPluginUrl.currentPageID){
+                    taskStatus = getValue(responseJSON, "taskStatus");
+                    personID = getValue(responseJSON, "taskPerson");
+                    addToTaskList(postContents[index], taskStatus, personID);
                 }
-                taskStatus = getValue(responseJSON, "taskStatus");
-                personID = getValue(responseJSON, "taskPerson");
-                addToTaskList(postContents[index], taskStatus, personID);
             }
-
         }, postIDs[i] + "/meta"
          , i);
     }
+}
+
+function isUserTask(taskProjectID, userProjectArray){
+    for (var i = 0; i < userProjectArray.length; i++){
+        if (taskProjectID == userProjectArray[i]){
+            return true;
+        }
+    }
+    return false;
 }
 
 /**
