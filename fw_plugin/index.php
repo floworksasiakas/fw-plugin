@@ -16,12 +16,10 @@ Author URI: http://fw2.blogs.tamk.fi/projects/code14-project/
  * Includes and registers the custom widgets.
  */
 function fw_load_widget() {
-    require_once('class-fwInputWidget.php');
-    require_once('class-fwTasklistWidget.php');
-    require_once('class-fwAlClientWidget.php');
+    require_once('widget/class-fwInputWidget.php');
+    require_once('widget/class-fwTasklistWidget.php');
     register_widget('fw_InputWidget');
     register_widget('fw_TasklistWidget');
-    register_widget('fw_AlClientWidget');
 }
 
 /**
@@ -33,7 +31,7 @@ function postPageEnqueue($hook) {
     if('post-new.php' == $hook){
         wp_enqueue_script(
             'adminCreatePostScript'
-            , plugin_dir_url( __FILE__ ) . 'adminCreatePostHandler.js'
+            , plugin_dir_url( __FILE__ ) . 'admin/adminCreatePostHandler.js'
         );
 
         wp_localize_script(
@@ -45,7 +43,7 @@ function postPageEnqueue($hook) {
     } else if ('toplevel_page_create-project-page' == $hook){
         wp_enqueue_script(
             'adminCreateProjectPageScript'
-            , plugin_dir_url( __FILE__ ) . 'adminCreateProjectPageHandler.js'
+            , plugin_dir_url( __FILE__ ) . 'admin/adminCreateProjectPageHandler.js'
         );
 
         wp_enqueue_script(
@@ -122,10 +120,10 @@ function createProjectPage() {
     if ( !current_user_can( 'manage_options' ) )  {
         wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
     }
-    require_once('adminCreateProjectPage.php');
+    require_once('admin/adminCreateProjectPage.php');
 }
 
-require_once('adminCustomPostMetaBoxLogic.php');
+require_once('admin/adminCustomPostMetaBoxLogic.php');
 require_once('fwCustomPostCommentParser.php');
 require_once('class-fwMagicWordReader.php');
 

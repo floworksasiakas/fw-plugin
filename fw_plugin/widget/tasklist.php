@@ -3,7 +3,7 @@
           <section id="tableWrapper"></section>';
 
     $tableStylePath = plugins_url( 'tableStyle.css', __FILE__ );
-    $JRAHandlerPath = plugins_url( 'JRAHandler.js', __FILE__ );
+    $JRAHandlerPath = plugins_url( '../JRAHandler.js', __FILE__ );
     $tasklistHandlerPath = plugins_url( 'tasklistHandler.js', __FILE__ );
 
     wp_enqueue_style('tableStyleCss', $tableStylePath);
@@ -21,10 +21,4 @@
                 , 'currentPageID' => get_the_ID()
                 , 'isHomePage' => is_home())
     );
-
-    /*
-    $projects = get_user_meta(1, 'projectIDs');
-    foreach ($projects as $project){
-        echo $project . "\n";
-    }*/
 ?>
