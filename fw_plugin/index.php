@@ -38,7 +38,8 @@ function postPageEnqueue($hook) {
             'adminCreatePostScript'
             , 'fwPluginUsers'
             , array( 'users' => get_users()
-                   , 'plugin_url' => plugins_url())
+                   , 'plugin_url' => plugins_url()
+                   , 'projectPages' => getProjectPages())
         );
     } else if ('toplevel_page_create-project-page' == $hook){
         wp_enqueue_script(
@@ -63,6 +64,19 @@ function postPageEnqueue($hook) {
             , array('users' => get_users())
         );
     }
+}
+
+function getProjectPages(){
+    $pages = get_pages();
+    $projectPageArray = array();
+
+    for($i = 0; $i < count($pages); $i++){
+        if ($pages[$i]->pageType === 'projectPage'){
+            array_push($projectPageArray, $pages[$i]);
+        }
+    }
+
+    return $projectPageArray;
 }
 
 function includeJQueryUI(){

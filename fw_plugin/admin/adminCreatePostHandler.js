@@ -35,5 +35,20 @@ function changeToTaskType(id){
 	}
 	html += "</select>";
 	html += hidden;
+
+	var pagesArray = fwPluginUsers.projectPages;
+	html += "<br />"
+		 +  "Project"
+		 +  "<br />";
+	html += "<select id='projectName'>";
+	for (var i = 0; i < pagesArray.length; i++){
+		html += "<option value'"
+			 + pagesArray[i]['post_title']
+			 + "'>"
+			 + pagesArray[i]['post_title']
+			 + "</option>";
+
+	}
+	html += "</select>";
 	$(id).append(html);
 }
