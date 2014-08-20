@@ -1,0 +1,9 @@
+INSTALL
+
+    File       : INSTALL.txt
+    Time-stamp : 2014-08-20T13:13
+
+1. On admin side, go to Settings -> Permalinks, and choose 'Post name' as the url.
+2. Make sure you have installed JSON REST API (https://wordpress.org/plugins/json-rest-api/),
+   and Basic Authentication (https://github.com/WP-API/Basic-Auth) plugins.
+3. Enjoy!

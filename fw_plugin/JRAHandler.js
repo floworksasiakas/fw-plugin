@@ -1,5 +1,5 @@
 /**
- * Default constructor
+ * Default constructor, initializes the most commonly used urls.
  */
 function JRAHandler(){
     this.rootUsersUrl = fwPluginUrl.siteurl + "/wp-json/users";

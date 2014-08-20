@@ -66,6 +66,9 @@ function postPageEnqueue($hook) {
     }
 }
 
+/**
+ * Returns an array of pages that are project pages.
+ */
 function getProjectPages(){
     $pages = get_pages();
     $projectPageArray = array();
@@ -79,6 +82,9 @@ function getProjectPages(){
     return $projectPageArray;
 }
 
+/**
+ * Includes all the files needed for using JQuery UI features.
+ */
 function includeJQueryUI(){
     wp_enqueue_style(
         'jQueryUIStyle'
@@ -104,7 +110,7 @@ function enqueueNonAdminScripts() {
     if (!is_admin()) {
         wp_enqueue_script(
             'commentFieldHandler'
-            , plugin_dir_url( __FILE__ ) . 'commentHandler.js'
+            , plugin_dir_url( __FILE__ ) . 'comment/commentHandler.js'
             , array( 'jquery' )   
         );
 
@@ -121,6 +127,9 @@ function enqueueNonAdminScripts() {
     }
 }
 
+/**
+ * Callback function to create the menu for project page creation site.
+ */
 function fwPluginMenu() {
     add_menu_page( 'FW-Project-Page'
                    , 'Create a new project page'
@@ -130,6 +139,10 @@ function fwPluginMenu() {
                    , 'dashicons-hammer' );
 }
 
+/**
+ * Checks if the current user has enough permissions and includes the
+ * project page creation file.
+ */
 function createProjectPage() {
     if ( !current_user_can( 'manage_options' ) )  {
         wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
@@ -138,8 +151,8 @@ function createProjectPage() {
 }
 
 require_once('admin/adminCustomPostMetaBoxLogic.php');
-require_once('fwCustomPostCommentParser.php');
-require_once('class-fwMagicWordReader.php');
+require_once('comment/fwCustomPostCommentParser.php');
+require_once('comment/class-fwMagicWordReader.php');
 
 add_action('admin_menu', 'fwPluginMenu');
 add_action('admin_enqueue_scripts', 'postPageEnqueue');

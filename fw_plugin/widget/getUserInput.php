@@ -1,4 +1,8 @@
 <?php
+    /**
+     * Creates the interface used for the input widget
+     * and enqueues and localizes data used by it.
+     */
     $inputHandlerPath = plugins_url( 'inputHandler.js', __FILE__ );
     wp_enqueue_script('inputHandlerScript', $inputHandlerPath);
 
@@ -22,17 +26,4 @@
             , array('users' => get_users(),
                     'projectPages' => getProjectPages())
         );
-
-    function getProjectPages(){
-        $pages = get_pages();
-        $projectPageArray = array();
-
-        for($i = 0; $i < count($pages); $i++){
-            if ($pages[$i]->pageType === 'projectPage'){
-                array_push($projectPageArray, $pages[$i]);
-            }
-        }
-
-        return $projectPageArray;
-    }
 ?>

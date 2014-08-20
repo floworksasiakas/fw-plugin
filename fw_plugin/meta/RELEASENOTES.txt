@@ -1,0 +1,53 @@
+RELEASE NOTES
+
+    File       : RELEASENOTES.txt
+    Time-stamp : 2014-04-15T16:28
+    Description: Release notes for release 1.
+
+GENERAL INFO
+
+    Most of the features were implemented, but because of
+    time constraints, a few features were left outside.
+
+PLANNED FEATURES
+
+    - User can create a project management site
+    - User can assign a parent page for the site
+    - User can set collaborators for the created project
+    - User can create tasks for the project on the admin side
+    - User can create tasks for the project using a custom widget
+    - User can see all of his/her tasks on the site's index page
+    - User can see all of his/her tasks for a specific project
+      on the specific project's page
+    - User can change a task's status by commenting on the task with
+      the correct 'magic word'
+    - User can assign a task to a different person by commenting
+      on the task with the correct 'magic word'
+    - User can create a status or a blog post using a custom widget
+    - User can see his/her tasks on the correct project page
+    - Bootstrap for front end
+    - Activity list
+
+IMPLEMENTED FEATURES
+
+    - User can create a project management site
+    - User can assign a parent page for the site
+    - User can set collaborators for the created project
+    - User can create tasks for the project on the admin side
+    - User can create tasks for the project using a custom widget
+    - User can see all of his/her tasks on the site's index page
+    - User can see all of his/her tasks for a specific project
+      on the specific project's page
+    - User can change a task's status by commenting on the task with
+      the correct 'magic word'
+    - User can assign a task to a different person by commenting
+      on the task with the correct 'magic word'
+    - User can create a status or a blog post using a custom widget
+
+FEATURES NOT IMPLEMENTED
+
+    - User can see his/her tasks on the correct project page
+    - Bootstrap for front end
+    - Activity list
+
+End of file.

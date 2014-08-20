@@ -21,6 +21,11 @@ $('document').ready(function(){
     }
 });
 
+/**
+ * Returns true if the current user can view the project
+ * page's tasklist, or if the current page is the site's
+ * home page. Otherwise returns false.
+ */
 function currentUserCanViewProject(){
     if (fwPluginUrl.isHomePage){
         return true;
@@ -107,6 +112,10 @@ function readMetaDatas(postIDs, postContents){
     }
 }
 
+/**
+ * Returns true if the given task belongs to a project
+ * the current user belongs to. False otherwise.
+ */
 function isUserTask(taskProjectID, userProjectArray){
     for (var i = 0; i < userProjectArray.length; i++){
         if (taskProjectID == userProjectArray[i]){

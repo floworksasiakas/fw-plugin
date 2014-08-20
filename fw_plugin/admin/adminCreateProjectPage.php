@@ -1,6 +1,9 @@
 <?php
 	createInterface();
 
+	/** 
+	 * Creates the interface used for project page creation.
+	 */
 	function createInterface(){
 		$pages = get_pages();
 		$users = get_users();
@@ -17,8 +20,6 @@
 		}
 		
 		echo '</select>
-				or
-				<input type="text" id="parentPageField"></input>
 			<h2>Collaborators</h2>
 			<section id="collaboratorArea">
 			<input type="button" name="addNewCollaborator" id="addNewCollaborator" value="Add new"></input><br />

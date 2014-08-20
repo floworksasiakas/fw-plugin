@@ -7,6 +7,7 @@ $('document').ready(function(){
 		nameArray[i] = fwPlugin.users[i]['data']['user_nicename'];
 	}
 
+	// Adds a new dropdown list of users to the collaborator list.
 	$('#addNewCollaborator').click(function(event){
 		var collaboratorCount = $('.collaboratorField').length;
 
@@ -23,6 +24,7 @@ $('document').ready(function(){
 		}
 	});
 
+	// Begins the project page creation when the button is clicked.
 	$('#createProjectPage').click(function(){
 		var handler = new JRAHandler();
 		var projectName = $('#projectName').val();
@@ -42,6 +44,11 @@ $('document').ready(function(){
 	});
 });
 
+/**
+ * Stores the project page ID to the collaborator user's
+ * metadata.
+ * @param {Integer} the project page ID to be stored.
+ */
 function storeUserProjectMeta(pageID){
 	var collaborators = document.getElementsByClassName('collaboratorField');
 	var collaboratorNames = [];
@@ -67,6 +74,12 @@ function storeUserProjectMeta(pageID){
 	}
 }
 
+/**
+ * Creates the project page with the given parent page
+ * and project name parameters.
+ * @param {String} the name of the parent page.
+ * @param {String} the name of the project.
+ */
 function createProjectPage(parentPage, projectName){
 	var handler = new JRAHandler();
 	// Gets the page ID that matches the parentPage parameter.
@@ -80,10 +93,18 @@ function createProjectPage(parentPage, projectName){
 	}, parentPage);
 }
 
+/**
+ * Called when the user metadata has been udpated
+ * with the correct project IDs.
+ */
 function userMetaUpdateSuccessfull(){
 	alert('User metadata updated!');
 }
 
+/**
+ * Called when the project page is created.
+ * @param {String} the name of the page.
+ */
 function pageCreationSuccessfull(pageName){
 	var handler = new JRAHandler();
 	handler.getPageID(function(pageID){
@@ -91,6 +112,9 @@ function pageCreationSuccessfull(pageName){
 	}, pageName);
 }
 
+/**
+ * Deletes the last collaborator that was added in the list.
+ */
 function deleteCollaborator(){
 	var collaboratorCount = $('.collaboratorField').length;
 	if (collaboratorCount > 1){

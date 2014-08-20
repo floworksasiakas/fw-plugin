@@ -1,6 +1,6 @@
 <?php
 	require_once('../../../wp-config.php');
-
+	
 	if (isset($_GET['userID'])){
 
 		$userID = $_GET['userID'];

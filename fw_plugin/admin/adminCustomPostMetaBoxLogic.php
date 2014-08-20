@@ -25,7 +25,6 @@ function fwPluginMetaCallback($posts) {
      * Use get_post_meta() to retrieve an existing value
      * from the database and use the value for the form.
      */
-    //$value = get_post_meta( $post->ID, 'taskPerson', true );
 
     echo '<select id="postType" name="postType" onchange="changeInputFields(this.value)">
             <option value="Status">Status</option>

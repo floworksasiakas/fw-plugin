@@ -38,6 +38,8 @@ function changeToTaskType(id){
 
 	var pagesArray = fwPluginUsers.projectPages;
 	html += "<br />"
+		 +  "NOTE: This functionality is not operational. Project data is not handled in any way"
+		 +  "<br />"
 		 +  "Project"
 		 +  "<br />";
 	html += "<select id='projectName'>";

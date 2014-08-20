@@ -1,4 +1,8 @@
 <?php
+    /**
+     * Generates the interface and HTML used in the tasklist widget.
+     * Also enqueues and localizes the scripts used by the tasklist.
+     */
     echo '<button id="taskListReloadButton">Reload</button>
           <section id="tableWrapper"></section>';
 

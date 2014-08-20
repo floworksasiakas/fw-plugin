@@ -1,0 +1,26 @@
+PRODUCT BACKLOG
+
+    File       : PRODUCTBACKLOG.txt
+    Time-stamp : 2014-08-20T12:58 Sami Joutsijoki
+    Description: Product Backlog is the master list of all functionality desired in 
+                 the product. 
+
+PRODUCT BACKLOG
+
+    RELEASE 1: 2014-08-20T13:00
+
+    - User can create a project management site
+    - User can assign a parent page for the site
+    - User can set collaborators for the created project
+    - User can create tasks for the project on the admin side
+    - User can create tasks for the project using a custom widget
+    - User can see all of his/her tasks on the site's index page
+    - User can see all of his/her tasks for a specific project
+      on the specific project's page
+    - User can change a task's status by commenting on the task with
+      the correct 'magic word'
+    - User can assign a task to a different person by commenting
+      on the task with the correct 'magic word'
+    - User can create a status or a blog post using a custom widget
+
+End of file.
