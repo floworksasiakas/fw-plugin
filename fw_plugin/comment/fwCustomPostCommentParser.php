@@ -26,7 +26,7 @@
 		if (contains($content, $doneKeyword)){
 			$processedString = processTaskStatusContent($content, $doneKeyword, "green");
 		} else if (contains($content, $inprogressKeyword)){
-			$processedString = processTaskStatusContent($content, $inprogressKeyword, "yellow");
+			$processedString = processTaskStatusContent($content, $inprogressKeyword, "#D6D61E");
 		} else if (contains($content, $waitingKeyword)){
 			$processedString = processTaskStatusContent($content, $waitingKeyword, "red");
 		}

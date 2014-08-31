@@ -33,9 +33,7 @@ $('document').ready(function(){
 		var parentPage = 0;
 
 		if (existingPage === 'none'){
-			if (!(newlyCreatedPage === '')){
-				parentPage = newlyCreatedPage;
-			}
+			parentPage = 0;
 		} else {
 			parentPage = existingPage;
 		}
