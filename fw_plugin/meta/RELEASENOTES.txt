@@ -61,5 +61,8 @@ KNOWN BUGS/OTHER NOTES
     - When creating a task for a certain project, one can set the task to
       belong to a person not in the project.
     - Creating 2 project pages with identical names can cause bugs (not tested).
+    - When commenting on a task, user cannot comment multiple "command words"
+      in a one comment. For example, !assign <name> and #done cannot be used
+      simultaneously.
 
 End of file.
