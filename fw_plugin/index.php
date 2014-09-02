@@ -18,8 +18,10 @@ Author URI: http://fw2.blogs.tamk.fi/projects/code14-project/
 function fw_load_widget() {
     require_once('widget/class-fwInputWidget.php');
     require_once('widget/class-fwTasklistWidget.php');
+    require_once('widget/class-fwAlClientWidget.php');
     register_widget('fw_InputWidget');
     register_widget('fw_TasklistWidget');
+    register_widget('fw_AlClientWidget');
 }
 
 /**

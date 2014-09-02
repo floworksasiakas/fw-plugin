@@ -9,7 +9,8 @@
     wp_enqueue_script('activityHandlerScript', $activityHandlerPath);
 
     wp_localize_script(
-		'fwPluginUrl'
+        'activityHandlerScript'
+		, 'fwPluginUrl'
     	, array('siteurl' => get_option('siteurl'))
     );
 ?>

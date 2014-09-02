@@ -30,14 +30,14 @@ $('document').ready(function(){
  * Get posts from json.
  */
 function loadPosts() {
-	httpGetPosts("/wp-json/posts");
+	httpGetPosts("./wp-json/posts");
 }
 
 /**
  * Get comments from json.
  */
 function loadComments() {
-    httpGetComments("/wp-json/posts/0/comments");
+    httpGetComments("./wp-json/posts/0/comments");
 }
 
 /**
